@@ -1,0 +1,5 @@
+[submodule "score"]
+	path = score
+	url = https://github.com/OSSIA/score
+	shallow = true
+
