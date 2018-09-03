@@ -1,25 +1,53 @@
 cmake_minimum_required(VERSION 3.11)
-project(score_remote LANGUAGES CXX)
+project(remote LANGUAGES CXX)
 
-find_package(Qt5 5.10 COMPONENTS Core Widgets Qml)
+## Settings
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
-set(OSSIA_PROTOCOL_MIDI 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_MINUIT 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_OSC 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_HTTP 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_SERIAL 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_WS 0 CACHE "" INTERNAL)
-set(OSSIA_PROTOCOL_AUDIO 0 CACHE "" INTERNAL)
+if(APPLE)
+  set(CMAKE_INSTALL_NAME_DIR @rpath)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+  set(CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;@executable_path;")
+endif()
 
-set(OSSIA_EDITOR 0 CACHE "" INTERNAL)
-set(OSSIA_DATAFLOW 0 CACHE "" INTERNAL)
+## Metadata
+set(CPACK_PACKAGE_NAME "ossia remote")
+set(CPACK_PACKAGE_VENDOR "ossia")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ossia remote, a remote for OSCQuery devices")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_SOURCE_GENERATOR TGZ)
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "remote")
 
-set(OSSIA_QT 1 CACHE "" INTERNAL)
-set(OSSIA_QML_DEVICE 0 CACHE "" INTERNAL)
-set(OSSIA_QML_SCORE 0 CACHE "" INTERNAL)
+## Dependenices
+find_package(Qt5 5.10 COMPONENTS Core Widgets Qml)
+
+set(OSSIA_NO_INSTALL ON CACHE INTERNAL "" FORCE)
+set(OSSIA_DISABLE_QT_PLUGIN ON CACHE INTERNAL "" FORCE)
+set(OSSIA_STATIC ON CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_MIDI OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_MINUIT OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_OSC OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_HTTP OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_SERIAL OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_WEBSOCKETS OFF CACHE "" INTERNAL)
+set(OSSIA_PROTOCOL_AUDIO OFF CACHE "" INTERNAL)
+
+set(OSSIA_EDITOR OFF CACHE "" INTERNAL)
+set(OSSIA_DATAFLOW OFF CACHE "" INTERNAL)
+
+set(OSSIA_QT ON CACHE "" INTERNAL)
+set(OSSIA_QML_DEVICE OFF CACHE "" INTERNAL)
+set(OSSIA_QML_SCORE OFF CACHE "" INTERNAL)
 
 add_subdirectory(score/API)
 
@@ -54,23 +82,40 @@ set(SRCS
 )
 
 qt5_add_resources(QRCS "${CMAKE_CURRENT_SOURCE_DIR}/remote/qml.qrc")
-add_executable(score_remote_ui WIN32
+add_executable(remote WIN32
   ${SRCS} ${QRCS}
 )
 
-target_compile_features(score_remote_ui
+set_target_properties(remote
+  PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN 1
+
+    MACOSX_BUNDLE TRUE
+    MACOSX_BUNDLE_INFO_STRING "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "org.ossia.remote"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${CPACK_PACKAGE_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_NAME "ossia remote"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}"
+    MACOSX_BUNDLE_COPYRIGHT "https://ossia.io"
+#    MACOSX_BUNDLE_ICON_FILE "score.icns"
+    MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Info.plist.in"
+    )
+
+target_compile_features(remote
   PRIVATE
     cxx_std_17
 )
 
-target_link_libraries(score_remote_ui
+target_link_libraries(remote
   PRIVATE
     ossia
     Qt5::Core Qt5::Widgets Qt5::Qml
     Servus_iface
 )
 
-target_include_directories(score_remote_ui
+target_include_directories(remote
   PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/remote"
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/lib"
@@ -81,16 +126,24 @@ target_include_directories(score_remote_ui
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-device"
     )
 
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_base_export.h" "#pragma once\n#define SCORE_LIB_BASE_EXPORT")
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_state_export.h" "#pragma once\n#define SCORE_LIB_STATE_EXPORT")
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_device_export.h" "#pragma once\n#define SCORE_LIB_DEVICE_EXPORT")
-file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_compiler_detection.hpp" "#pragma once")
-
-if(DEPLOYMENT_BUILD)
-  set_target_properties(score_remote_ui PROPERTIES MACOSX_BUNDLE TRUE)
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/score_lib_base_export.h")
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_base_export.h" "#pragma once\n#define SCORE_LIB_BASE_EXPORT")
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_state_export.h" "#pragma once\n#define SCORE_LIB_STATE_EXPORT")
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_lib_device_export.h" "#pragma once\n#define SCORE_LIB_DEVICE_EXPORT")
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/score_compiler_detection.hpp" "#pragma once")
 endif()
 
 install(
-  TARGETS score_remote_ui
+  TARGETS remote
   BUNDLE DESTINATION .
   RUNTIME DESTINATION bin)
+
+if(APPLE)
+    set(MACDEPLOYQT_EXE "${_qt5_root_dir}/../../bin/macdeployqt")
+    install(CODE "
+      execute_process(COMMAND ${MACDEPLOYQT_EXE} \"\${CMAKE_INSTALL_PREFIX}/remote.app\" -qmldir=${CMAKE_CURRENT_SOURCE_DIR}/remote/qml)
+    ")
+    set(CPACK_GENERATOR "DragNDrop")
+endif()
+
+include(CPack)
