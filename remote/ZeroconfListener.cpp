@@ -94,7 +94,6 @@ void ZeroconfListener::instanceAdded(const std::string& instance)
 {
   for(const auto& dev : context.device)
   {
-    qDebug() << dev->get_name().c_str() << instance.c_str();
     if(dev->get_name() == instance)
       return;
   }

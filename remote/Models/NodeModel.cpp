@@ -144,7 +144,6 @@ QModelIndex
 NodeModel::index(int row, int column, const QModelIndex& parent) const
 {
   auto& p = nodeFromModelIndex(parent);
-  qDebug() << p.displayName() << rowCount(parent) << columnCount(parent);
 
   if (!hasIndex(row, column, parent))
     return QModelIndex();

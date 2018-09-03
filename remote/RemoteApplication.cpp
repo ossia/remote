@@ -9,6 +9,7 @@
 #include <score/plugins/settingsdelegate/SettingsDelegateModel.hpp>
 #include <score/serialization/VisitorCommon.hpp>
 #include <QQmlContext>
+#include <QQuickWindow>
 namespace RemoteUI
 {
 RemoteApplication::RemoteApplication(int& argc, char** argv)
@@ -20,6 +21,7 @@ RemoteApplication::RemoteApplication(int& argc, char** argv)
                 m_clients,
                 *this,
                 [&] {
+                  QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
                   m_engine.rootContext()->setContextProperty(
                       "factoriesModel",
                       QVariant::fromValue(m_widgets.objectList));
