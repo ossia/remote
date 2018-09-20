@@ -7,7 +7,8 @@ DynamicHSliderForm
     signal valueChange(real val)
     signal addressChanged(string addr)
 
-    slider.onPositionChanged: { valueChange(slider.from + slider.position * (slider.to - slider.from)); }
+   // slider.onPositionChanged: { valueChange(slider.from + slider.position * (slider.to - slider.from)); }
+    slider.onValueChanged: { valueChange(slider.value); }
 
     property alias dropper: dropper
     AddressDrop

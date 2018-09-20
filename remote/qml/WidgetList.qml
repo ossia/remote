@@ -2,17 +2,12 @@ import QtQuick 2.11
 import QtQuick.Layouts 1.3
 
 Item {
-    Rectangle
-    {
-        anchors.fill: parent
-        border.color: "black"
-    }
 
     id: widgList
 
     Component {
         id: itemFiller
-        Item { Layout.fillHeight: true }
+        Item { Layout.fillHeight: true}
     }
 
     Component {
@@ -20,10 +15,14 @@ Item {
 
         Rectangle
         {
-            height: 75
-            width: theView.width
-            border.color: "grey"
             id: delegateLayout
+
+            height: theView.cellHeight
+            width: theView.cellWidth
+            color: "grey"
+
+            border.color: "#5e5a5c"
+            border.width: 1
 
             MouseArea {
                 id: mouseArea
@@ -53,14 +52,20 @@ Item {
         }
     }
 
-    ListView {
+    GridView {
         id: theView
         model: factoriesModel
 
+        anchors.centerIn: parent
+        width: 180
+        height: 150
+
         highlightFollowsCurrentItem: true
-        anchors.fill: parent
         clip: true
         delegate: nameDelegate
-        spacing: 5
+
+        cellWidth: 60
+        cellHeight: 75
+
     }
 }

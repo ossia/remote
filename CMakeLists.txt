@@ -11,9 +11,9 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 if(APPLE)
-  set(CMAKE_INSTALL_NAME_DIR @rpath)
-  set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-  set(CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;@executable_path;")
+  #set(CMAKE_INSTALL_NAME_DIR @rpath)
+  #set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+  #set(CMAKE_INSTALL_RPATH "@loader_path/../Frameworks;@executable_path;")
 endif()
 
 ## Metadata
@@ -79,9 +79,31 @@ set(SRCS
 "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/Value.cpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/ValueConversion.cpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/Address.cpp"
+
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/graph.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/creativecontrolsplugin.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/angleslider.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/scope.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/cpputils.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/xytarget.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/polygon.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/toucharea.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/painted_polygon.hpp"
+
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/graph.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/creativecontrolsplugin.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/angleslider.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/scope.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/cpputils.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/xytarget.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/polygon.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/toucharea.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/painted_polygon.cpp"
+
 )
 
-qt5_add_resources(QRCS "${CMAKE_CURRENT_SOURCE_DIR}/remote/qml.qrc")
+qt5_add_resources(QRCS "${CMAKE_CURRENT_SOURCE_DIR}/remote/qml.qrc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/com_github_jcelerier_qml-creative-controls.qrc")
 add_executable(remote WIN32
   ${SRCS} ${QRCS}
 )
@@ -93,7 +115,7 @@ set_target_properties(remote
 
     OUTPUT_NAME "ossia-remote"
 
-    MACOSX_BUNDLE TRUE
+    MACOSX_BUNDLE FALSE
     MACOSX_BUNDLE_INFO_STRING "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.ossia.remote"
     MACOSX_BUNDLE_LONG_VERSION_STRING "${CPACK_PACKAGE_VERSION}"
@@ -126,6 +148,7 @@ target_include_directories(remote
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/lib"
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state"
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-device"
+    "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src"
     )
 
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/score_lib_base_export.h")

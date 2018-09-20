@@ -3,12 +3,18 @@ import QtQuick.Controls 2.4
 
 Item
 {
+    id: staticSwitch
+
+    anchors.fill: parent
+
     Text
     {
-        x: 0
-        y: 0
-        width: 212
-        height: 18
+        anchors{
+            bottom: staticSwitch.bottom
+            bottomMargin: 3
+            horizontalCenter: staticSwitch.horizontalCenter
+        }
+
         text: qsTr("Switch")
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 12
@@ -16,10 +22,16 @@ Item
         verticalAlignment: Text.AlignBottom
     }
 
-    Switch
-    {
-        x: 69
-        y: 24
-        enabled: false
+    Image{
+
+        anchors{
+            top: staticSwitch.top
+            topMargin: 5
+            horizontalCenter: staticSwitch.horizontalCenter
+        }
+        source: "qrc:/resources/switch.png"
+        width: 50
+        fillMode: Image.PreserveAspectFit
+
     }
 }

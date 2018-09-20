@@ -3,7 +3,7 @@ import QtQuick.Controls 2.4
 
 Item
 {
-    id: staticSlider
+    id: staticVSlider
 
     anchors.fill: parent
 
@@ -11,22 +11,28 @@ Item
     {
 
         anchors{
-            bottom: staticSlider.bottom
+            bottom: staticVSlider.bottom
             bottomMargin: 3
-            horizontalCenter: staticSlider.horizontalCenter
+            horizontalCenter: staticVSlider.horizontalCenter
         }
 
-        text: qsTr("Slider")
+        text: qsTr("VSlider")
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 12
         textFormat: Text.PlainText
         verticalAlignment: Text.AlignBottom
+
     }
 
     Image{
-        source: "qrc:/resources/slider.png"
-        width:40
-        height: width
-    }
 
+        anchors{
+            top: staticVSlider.top
+            topMargin: 5
+            horizontalCenter: staticVSlider.horizontalCenter
+        }
+        source: "qrc:/resources/slider.png"
+        width: 50
+        fillMode: Image.PreserveAspectFit
+    }
 }

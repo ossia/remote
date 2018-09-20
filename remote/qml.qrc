@@ -12,6 +12,8 @@
         <file>qml/widgets/static/StaticLabel.qml</file>
         <file>qml/widgets/static/StaticLineEdit.qml</file>
         <file>qml/widgets/static/StaticSlider.qml</file>
+        <file>qml/widgets/static/StaticHSlider.qml</file>
+        <file>qml/widgets/static/StaticVSlider.qml</file>
         <file>qml/widgets/static/StaticSwitch.qml</file>
         <file>qml/widgets/dynamic/DynamicButton.qml</file>
         <file>qml/widgets/dynamic/DynamicButtonForm.ui.qml</file>
@@ -27,5 +29,8 @@
         <file>qml/widgets/dynamic/AddressLabel.qml</file>
         <file>qml/widgets/dynamic/DynamicLabel.qml</file>
         <file>qml/widgets/dynamic/DynamicLabelForm.ui.qml</file>
+        <file>resources/slider.png</file>
+        <file>resources/switch.png</file>
+
     </qresource>
 </RCC>

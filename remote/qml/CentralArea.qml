@@ -28,9 +28,8 @@ CentralAreaForm {
             implicitWidth:2000
             implicitHeight:2000
 
-            border.color: "darkBlue"
-            border.width: 2
-            color: "#f8fbfc"
+
+            color: "#302d2e"
         }
 
         width:2000
@@ -41,6 +40,8 @@ CentralAreaForm {
 
     DropArea {
         anchors.fill: parent
+
+
         keys: ["iscore/x-remote-widget", "iscore/x-remote-address"]
         onEntered: {
             centralItem.color = "#FCC"
@@ -49,7 +50,7 @@ CentralAreaForm {
             var item = centralItem.childAt(drag.x, drag.y);
             if(item !== null)
             {
-                centralItem.color = "#f8fbfc"
+                centralItem.color = "#FCC"
                 if(item !== draggedItem)
                 {
                     if(draggedItem != null)
@@ -77,7 +78,7 @@ CentralAreaForm {
         }
 
         onExited: {
-            centralItem.color = "#f8fbfc"
+            centralItem.color = "#5e5a5c"
             draggedItem = null;
         }
         onDropped: {
@@ -105,7 +106,7 @@ CentralAreaForm {
 
             }
             draggedItem = null;
-            centralItem.color = "#f8fbfc"
+            centralItem.color = "#302d2e"
         }
     }
 }

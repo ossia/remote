@@ -11,7 +11,7 @@ Text
     font.pointSize: 12
     textFormat: Text.PlainText
     verticalAlignment: Text.AlignBottom
-
+    color: "#d2d2d2"
     signal removeMe()
 
     MouseArea {

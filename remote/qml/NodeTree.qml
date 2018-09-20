@@ -19,6 +19,10 @@ Item {
             title: "Address"
             role: "address"
             width: 150
+            delegate:Rectangle{
+
+                color: "#302d2e"
+            }
         }
 
         itemDelegate: Item {
@@ -37,7 +41,7 @@ Item {
             Text {
                 id: text
                 anchors.verticalCenter: parent.verticalCenter
-                color: styleData.selected ? "#eee" : "#000"
+                color: styleData.selected ? "#eee" : "#d2d2d2"//"#000"
                 elide: styleData.elideMode
                 text: styleData.value
                 font.pointSize: 10
@@ -64,8 +68,8 @@ Item {
             color: styleData.selected
                     ? "#aaa"
                     : (styleData.alternate
-                       ? "#f0f0f0"
-                       : "#f5f5f5")
+                       ? "#5e5a5c"
+                       : "grey")
 
             height: 20
         }

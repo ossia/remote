@@ -6,7 +6,9 @@ DynamicSwitchForm
     signal valueChange(bool val)
     signal addressChanged(string addr)
 
-    slider.onPositionChanged: { valueChange(slider.position); }
+//    dynamicSwitch.onPositionChanged: { valueChange(slider.position); }
+    dynamicSwitch.onStateChanged: { valueChange(dynamicSwitch.state === "ON"); }
+
     id: widg
     property alias dropper: dropper
     AddressDrop

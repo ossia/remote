@@ -3,23 +3,20 @@ import QtQuick.Controls 2.4
 
 Item
 {
+    id: staticLineEdit
+    anchors.fill: parent
+
     Text
     {
-        x: 0
-        y: 0
-        width: 212
-        height: 18
+        anchors.centerIn: staticLineEdit
+
         text: qsTr("Text field")
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 12
         textFormat: Text.PlainText
         verticalAlignment: Text.AlignBottom
+        wrapMode: Text.WordWrap
+        font.bold: true
     }
 
-    TextField
-    {
-        x: 6
-        y: 24
-        enabled: false
-    }
 }

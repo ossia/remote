@@ -13,5 +13,5 @@ DynamicButtonForm
         item: widg
     }
 
-    Component.onCompleted: button.clicked.connect(clicked)
+    Component.onCompleted: button.pressed.connect(clicked)
 }

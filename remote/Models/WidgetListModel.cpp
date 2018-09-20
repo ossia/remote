@@ -12,12 +12,12 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
   componentList.push_back(new RemoteUI::WidgetListData{
       WidgetKind::HSlider, "HSlider", "Horizontal Slider",
       QUrl("qrc:///qml/widgets/dynamic/DynamicHSlider.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticSlider.qml"), engine});
+      QUrl("qrc:///qml/widgets/static/StaticHSlider.qml"), engine});
 
   componentList.push_back(new RemoteUI::WidgetListData{
       WidgetKind::VSlider, "VSlider", "Vertical Slider",
       QUrl("qrc:///qml/widgets/dynamic/DynamicVSlider.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticSlider.qml"), engine});
+      QUrl("qrc:///qml/widgets/static/StaticVSlider.qml"), engine});
 
   componentList.push_back(new RemoteUI::WidgetListData{
       WidgetKind::CheckBox, "CheckBox", "CheckBox",

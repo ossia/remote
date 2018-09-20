@@ -1,6 +1,7 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
+import com.github.jcelerier.CreativeControls 1.0
 
 Rectangle
 {
@@ -24,15 +25,15 @@ Rectangle
             Layout.preferredWidth: 212
         }
 
-        Slider
+        VSlider
         {
             id: slider
             x: 86
             y: 24
             width: 40
             height: 162
-            Layout.fillWidth: true
-            orientation: Qt.Vertical
+            //Layout.fillWidth: true
+           // orientation: Qt.Vertical
         }
     }
 }

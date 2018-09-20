@@ -3,7 +3,7 @@ import QtQuick.Controls 2.4
 
 Item
 {
-    id: staticButton
+    id: staticHSlider
 
     anchors.fill: parent
 
@@ -11,12 +11,12 @@ Item
     {
 
         anchors{
-            bottom: staticButton.bottom
+            bottom: staticHSlider.bottom
             bottomMargin: 3
-            horizontalCenter: staticButton.horizontalCenter
+            horizontalCenter: staticHSlider.horizontalCenter
         }
 
-        text: qsTr("Button")
+        text: qsTr("HSlider")
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 12
         textFormat: Text.PlainText
@@ -24,14 +24,14 @@ Item
     }
 
     Image{
-
         anchors{
-            top: staticButton.top
+            top: staticHSlider.top
             topMargin: 5
-            horizontalCenter: staticButton.horizontalCenter
+            horizontalCenter: staticHSlider.horizontalCenter
         }
-        source: "qrc:/resources/switch.png"
+        source: "qrc:/resources/slider.png"
         width: 50
         fillMode: Image.PreserveAspectFit
+        rotation: 90
     }
 }

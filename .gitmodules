@@ -2,3 +2,6 @@
 	path = score
 	url = https://github.com/OSSIA/score
 
+[submodule "3rdparty/qml-creative-controls"]
+	path = 3rdparty/qml-creative-controls
+	url = https://github.com/jcelerier/qml-creative-controls
