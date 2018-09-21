@@ -6,7 +6,7 @@ MainPageForm {
 
     Rectangle{
         anchors.fill: parent
-        color: "#5e5a5c"
+        color: "#302d2e"
     }
 
     RowLayout

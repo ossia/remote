@@ -1,6 +1,5 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.3
-
 Item {
 
     id: widgList
@@ -9,7 +8,6 @@ Item {
         id: itemFiller
         Item { Layout.fillHeight: true}
     }
-
     Component {
         id: nameDelegate
 
@@ -21,13 +19,57 @@ Item {
             width: theView.cellWidth
             color: "grey"
 
-            border.color: "#5e5a5c"
+            border.color: "#302d2e"
             border.width: 1
+
 
             MouseArea {
                 id: mouseArea
                 anchors.fill: delegateLayout
+
                 drag.target: draggable
+
+                hoverEnabled: true
+                onEntered: displayName()
+                onExited: hideName()
+            }
+            function displayName(){
+                label.opacity = 1.;
+                nameObj.text = name;
+            }
+            function hideName(){
+                label.opacity = 0.;
+                nameObj.text = "";
+            }
+            Item{
+                id: label
+
+                z: 10
+                anchors.fill: parent
+                opacity: 0
+                Behavior on opacity {NumberAnimation{easing.type: Easing.InOutQuad}}
+
+
+                Rectangle{
+                    color:  "grey"//"#302d2e"
+                    opacity: 0.9
+                    border.width: 1
+                    border.color: "#302d2e"
+                    anchors.fill: parent
+                }
+                Text{
+                    id: nameObj
+
+                    text: ""
+                    anchors.centerIn: parent
+
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    verticalAlignment: Text.AlignBottom
+                    wrapMode: Text.WordWrap
+                    font.bold: true
+                     color: "#161516"
+                }
             }
 
             Component.onCompleted: {
@@ -38,16 +80,15 @@ Item {
 
             Item {
                 id: draggable
-                width: 0
-                height: 0
-                anchors.fill: parent
+                anchors.fill: delegateLayout
 
                 Drag.active: mouseArea.drag.active
-                Drag.hotSpot.x: 0
-                Drag.hotSpot.y: 0
+                Drag.hotSpot.x: 10
+                Drag.hotSpot.y: 10
 
                 Drag.mimeData: { "iscore/x-remote-widget": name }
                 Drag.dragType: Drag.Automatic
+                Drag.imageSource: dragImageSource != "" ? "qrc:/resources/" + dragImageSource : ""
             }
         }
     }
@@ -65,7 +106,9 @@ Item {
         delegate: nameDelegate
 
         cellWidth: 60
-        cellHeight: 75
+        cellHeight: 60
 
     }
+
+
 }

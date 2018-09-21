@@ -6,17 +6,32 @@
 #include <QQmlApplicationEngine>
 #include <QTimer>
 #include <RemoteApplication.hpp>
+#include <QCursor>
 
-#include "3rdparty/qml-creative-controls/src/creativecontrolsplugin.hpp"
-#include "3rdparty/qml-creative-controls/src/graph.hpp"
-#include "3rdparty/qml-creative-controls/src/angleslider.hpp"
-#include "3rdparty/qml-creative-controls/src/scope.hpp"
-#include "3rdparty/qml-creative-controls/src/polygon.hpp"
-#include "3rdparty/qml-creative-controls/src/painted_polygon.hpp"
-#include "3rdparty/qml-creative-controls/src/cpputils.hpp"
-#include "3rdparty/qml-creative-controls/src/xytarget.hpp"
-#include "3rdparty/qml-creative-controls/src/toucharea.hpp"
+#include <src/creativecontrolsplugin.hpp>
+#include <src/graph.hpp>
+#include <src/angleslider.hpp>
+#include <src/scope.hpp>
+#include <src/polygon.hpp>
+#include <src/painted_polygon.hpp>
+#include <src/cpputils.hpp>
+#include <src/xytarget.hpp>
+#include <src/toucharea.hpp>
+#include <wobjectimpl.h>
+struct CursorSetter
+    : QObject
+{
+  W_OBJECT(CursorSetter)
+public:
+    void hideCursor() {
+        qApp->setOverrideCursor(Qt::BlankCursor);
+    } W_SLOT(hideCursor)
 
+    void displayCursor() {
+        qApp->restoreOverrideCursor();
+    } W_SLOT(displayCursor)
+};
+W_OBJECT_IMPL(CursorSetter)
 int main(int argc, char* argv[])
 {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -35,7 +50,10 @@ int main(int argc, char* argv[])
                                      [] (QQmlEngine*, QJSEngine*) -> QObject* {
     return new CreativeControls::CppUtils;
   });
-
+  qmlRegisterSingletonType<CursorSetter>("CursorSetter", 1, 0, "CursorSetter",
+                                     [] (QQmlEngine*, QJSEngine*) -> QObject* {
+    return new CursorSetter;
+  });
   RemoteUI::RemoteApplication app{argc, argv};
 
   return app.exec();

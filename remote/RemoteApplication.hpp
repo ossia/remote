@@ -4,7 +4,7 @@
 #include <Models/WidgetListModel.hpp>
 #include <ZeroconfListener.hpp>
 #include <ossia/network/generic/generic_device.hpp>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 namespace RemoteUI
@@ -21,7 +21,7 @@ public:
 
 private:
   void loadPlugins();
-  QGuiApplication m_app;
+  QApplication m_app;
   QQmlApplicationEngine m_engine;
 
   RemoteUI::WidgetListModel m_widgets{m_engine};

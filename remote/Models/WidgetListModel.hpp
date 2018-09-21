@@ -19,6 +19,7 @@ class WidgetListData : public QObject
   Q_PROPERTY(WidgetKind widgetKind READ widgetKind NOTIFY widgetKindChanged)
   Q_PROPERTY(QString name READ name NOTIFY nameChanged)
   Q_PROPERTY(QString prettyName READ prettyName NOTIFY prettyNameChanged)
+  Q_PROPERTY(QString dragImageSource READ dragImageSource NOTIFY dragImageSourceChanged)
   Q_PROPERTY(QQmlComponent* component READ component)
   Q_PROPERTY(QQmlComponent* exampleComponent READ exampleComponent)
 public:
@@ -26,12 +27,14 @@ public:
       WidgetKind kind,
       QString name,
       QString prettyName,
+      QString dragImageSource,
       QUrl comp,
       QUrl exampleComp,
       QQmlApplicationEngine& eng)
       : m_kind{kind}
       , m_name{name}
       , m_prettyName{prettyName}
+      , m_dragImageSource{dragImageSource}
       , m_component{&eng, comp}
       , m_exampleComponent{&eng, exampleComp}
   {
@@ -45,6 +48,11 @@ public:
   QString name() const
   {
     return m_name;
+  }
+
+  QString dragImageSource() const
+  {
+    return m_dragImageSource;
   }
 
   const QQmlComponent* component() const
@@ -80,12 +88,15 @@ Q_SIGNALS:
 
   void prettyNameChanged(QString prettyName);
 
+  void dragImageSourceChanged(QString dragImageSource);
+
   void widgetKindChanged(WidgetKind widgetKind);
 
 private:
   WidgetKind m_kind;
   QString m_name;
   QString m_prettyName;
+  QString m_dragImageSource;
   QQmlComponent m_component;
   QQmlComponent m_exampleComponent;
 };

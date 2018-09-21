@@ -7,29 +7,9 @@ Item
 
     anchors.fill: parent
 
-    Text
-    {
-
-        anchors{
-            bottom: staticButton.bottom
-            bottomMargin: 3
-            horizontalCenter: staticButton.horizontalCenter
-        }
-
-        text: qsTr("Button")
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 12
-        textFormat: Text.PlainText
-        verticalAlignment: Text.AlignBottom
-    }
-
     Image{
 
-        anchors{
-            top: staticButton.top
-            topMargin: 5
-            horizontalCenter: staticButton.horizontalCenter
-        }
+        anchors.centerIn: parent
         source: "qrc:/resources/switch.png"
         width: 50
         fillMode: Image.PreserveAspectFit

@@ -17,6 +17,7 @@ Item
         verticalAlignment: Text.AlignBottom
         wrapMode: Text.WordWrap
         font.bold: true
+        color: "#161516"
     }
 
 }

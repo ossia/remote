@@ -44,13 +44,13 @@ CentralAreaForm {
 
         keys: ["iscore/x-remote-widget", "iscore/x-remote-address"]
         onEntered: {
-            centralItem.color = "#FCC"
+            centralItem.color = "grey"
         }
         onPositionChanged: {
             var item = centralItem.childAt(drag.x, drag.y);
             if(item !== null)
             {
-                centralItem.color = "#FCC"
+                centralItem.color = "grey"
                 if(item !== draggedItem)
                 {
                     if(draggedItem != null)
@@ -68,7 +68,7 @@ CentralAreaForm {
             }
             else
             {
-                centralItem.color = "#FCC"
+                centralItem.color = "grey"
                 if(draggedItem != null)
                 {
                     draggedItem.dropper.stopDragging(drag)

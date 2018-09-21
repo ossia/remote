@@ -7,31 +7,13 @@ Item
 
     anchors.fill: parent
 
-    Text
-    {
-
-        anchors{
-            bottom: staticHSlider.bottom
-            bottomMargin: 3
-            horizontalCenter: staticHSlider.horizontalCenter
-        }
-
-        text: qsTr("HSlider")
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 12
-        textFormat: Text.PlainText
-        verticalAlignment: Text.AlignBottom
-    }
-
     Image{
-        anchors{
-            top: staticHSlider.top
-            topMargin: 5
-            horizontalCenter: staticHSlider.horizontalCenter
-        }
+        id: img
+        anchors.centerIn: parent
         source: "qrc:/resources/slider.png"
         width: 50
         fillMode: Image.PreserveAspectFit
         rotation: 90
     }
+
 }

@@ -16,6 +16,7 @@ Item
         textFormat: Text.PlainText
         verticalAlignment: Text.AlignBottom
         font.bold: true
+         color: "#161516"
     }
 
 }

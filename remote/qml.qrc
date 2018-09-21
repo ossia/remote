@@ -31,6 +31,9 @@
         <file>qml/widgets/dynamic/DynamicLabelForm.ui.qml</file>
         <file>resources/slider.png</file>
         <file>resources/switch.png</file>
+        <file>resources/drag_switch.png</file>
+        <file>resources/drag_hslider.png</file>
+        <file>resources/drag_vslider.png</file>
 
     </qresource>
 </RCC>

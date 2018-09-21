@@ -148,7 +148,7 @@ target_include_directories(remote
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/lib"
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state"
     "${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-device"
-    "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls"
     )
 
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/score_lib_base_export.h")

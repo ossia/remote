@@ -7,28 +7,10 @@ Item
 
     anchors.fill: parent
 
-    Text
-    {
-        anchors{
-            bottom: staticSwitch.bottom
-            bottomMargin: 3
-            horizontalCenter: staticSwitch.horizontalCenter
-        }
-
-        text: qsTr("Switch")
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 12
-        textFormat: Text.PlainText
-        verticalAlignment: Text.AlignBottom
-    }
-
     Image{
 
-        anchors{
-            top: staticSwitch.top
-            topMargin: 5
-            horizontalCenter: staticSwitch.horizontalCenter
-        }
+        anchors.centerIn: parent
+
         source: "qrc:/resources/switch.png"
         width: 50
         fillMode: Image.PreserveAspectFit
