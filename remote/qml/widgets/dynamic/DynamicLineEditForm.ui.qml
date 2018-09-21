@@ -1,7 +1,7 @@
 import QtQuick 2.11
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
-
+import QtQuick.Controls.Styles 1.4
 Rectangle
 {
     property alias textField: field
@@ -32,6 +32,12 @@ Rectangle
             implicitHeight: 40
             width: 150
             height: 40
+            style: TextFieldStyle {
+                textColor: "#161516"
+                background: Rectangle {
+                    color: "#b4c889"
+                }
+            }
         }
 
     }

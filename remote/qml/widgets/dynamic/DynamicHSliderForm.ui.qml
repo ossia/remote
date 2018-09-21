@@ -21,6 +21,8 @@ Rectangle {
 
         HSlider {
             id: slider
+            width: 162
+            height: 40
             //orientation: Qt.Horizontal
         }
     }
