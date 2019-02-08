@@ -27,8 +27,8 @@ struct SetSliderAddress
   template<typename D, typename U>
   void operator()(bool c, const D&, const U&)
   {
-    QQmlProperty(item.item(), "slider.from").write(0.);
-    QQmlProperty(item.item(), "slider.to").write(1.);
+    QQmlProperty(item.item(), "from").write(0.);
+    QQmlProperty(item.item(), "to").write(1.);
     QQmlProperty(item.item(), "slider.stepSize").write(1);
     QQmlProperty(item.item(), "slider.value").write((qreal)c);
     item.m_connection = QObject::connect(
@@ -38,8 +38,8 @@ struct SetSliderAddress
   template<typename D, typename U>
   void operator()(int i, const D&, const U&)
   {
-    QQmlProperty(item.item(), "slider.from").write((qreal)0);
-    QQmlProperty(item.item(), "slider.to").write((qreal)127);
+    QQmlProperty(item.item(), "from").write((qreal)0);
+    QQmlProperty(item.item(), "to").write((qreal)127);
     QQmlProperty(item.item(), "slider.stepSize").write(1);
     QQmlProperty(item.item(), "slider.value").write((qreal)i);
 
@@ -53,10 +53,10 @@ struct SetSliderAddress
   void operator()(int i, const ossia::domain_base<int>& d, const U& u)
   {
     if(d.min)
-      QQmlProperty(item.item(), "slider.from").write((qreal)*d.min);
+      QQmlProperty(item.item(), "from").write((qreal)*d.min);
 
     if(d.max)
-      QQmlProperty(item.item(), "slider.to").write((qreal)*d.max);
+      QQmlProperty(item.item(), "to").write((qreal)*d.max);
 
     QQmlProperty(item.item(), "slider.stepSize").write(1);
     QQmlProperty(item.item(), "slider.value").write((qreal)i);
@@ -69,8 +69,8 @@ struct SetSliderAddress
   template<typename D, typename U>
   void operator()(float f, const D&, const U&)
   {
-    QQmlProperty(item.item(), "slider.from").write(0.);
-    QQmlProperty(item.item(), "slider.to").write(1.);
+    QQmlProperty(item.item(), "from").write(0.);
+    QQmlProperty(item.item(), "to").write(1.);
 
     QQmlProperty(item.item(), "slider.value").write((qreal)f);
 
@@ -83,10 +83,10 @@ struct SetSliderAddress
   void operator()(float f, const ossia::domain_base<float>& d, const U& u)
   {
     if(d.min)
-      QQmlProperty(item.item(), "slider.from").write((qreal)*d.min);
+      QQmlProperty(item.item(), "from").write((qreal)*d.min);
 
     if(d.max)
-      QQmlProperty(item.item(), "slider.to").write((qreal)*d.max);
+      QQmlProperty(item.item(), "to").write((qreal)*d.max);
 
     QQmlProperty(item.item(), "slider.value").write((qreal)f);
 
