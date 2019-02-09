@@ -3,11 +3,12 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
+
 #include <WidgetKind.hpp>
 namespace RemoteUI
 {
-/** An instance of this class represents a type of widget that can be instantiated.
- * There are two components:
+/** An instance of this class represents a type of widget that can be
+ * instantiated. There are two components:
  * - the main component which is put on CentralItemModel
  * - And the static component which is shown in the widget list
  */
@@ -19,24 +20,21 @@ class WidgetListData : public QObject
   Q_PROPERTY(WidgetKind widgetKind READ widgetKind NOTIFY widgetKindChanged)
   Q_PROPERTY(QString name READ name NOTIFY nameChanged)
   Q_PROPERTY(QString prettyName READ prettyName NOTIFY prettyNameChanged)
-  Q_PROPERTY(QString dragImageSource READ dragImageSource NOTIFY dragImageSourceChanged)
+  Q_PROPERTY(QString dragImageSource READ dragImageSource NOTIFY
+                 dragImageSourceChanged)
   Q_PROPERTY(QQmlComponent* component READ component)
   Q_PROPERTY(QQmlComponent* exampleComponent READ exampleComponent)
 public:
   WidgetListData(
-      WidgetKind kind,
-      QString name,
-      QString prettyName,
-      QString dragImageSource,
-      QUrl comp,
-      QUrl exampleComp,
+      WidgetKind kind, QString name, QString prettyName,
+      QString dragImageSource, QUrl comp, QUrl exampleComp,
       QQmlApplicationEngine& eng)
-      : m_kind{kind}
-      , m_name{name}
-      , m_prettyName{prettyName}
-      , m_dragImageSource{dragImageSource}
-      , m_component{&eng, comp}
-      , m_exampleComponent{&eng, exampleComp}
+      : m_kind {kind}
+      , m_name {name}
+      , m_prettyName {prettyName}
+      , m_dragImageSource {dragImageSource}
+      , m_component {&eng, comp}
+      , m_exampleComponent {&eng, exampleComp}
   {
     auto e = m_component.errorString();
     if (!e.isEmpty())

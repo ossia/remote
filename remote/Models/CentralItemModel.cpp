@@ -5,12 +5,14 @@
 #include "WidgetListModel.hpp"
 
 #include <Device/Node/DeviceNode.hpp>
-#include <Models/NodeModel.hpp>
-#include <Models/WidgetAddressSetup.hpp>
+
 #include <QDebug>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQmlProperty>
+
+#include <Models/NodeModel.hpp>
+#include <Models/WidgetAddressSetup.hpp>
 #include <WebSocketClient.hpp>
 namespace RemoteUI
 {
@@ -65,7 +67,7 @@ struct AddressItemFactory
 };
 
 CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
-    : QObject(parent), m_ctx{ctx}
+    : QObject(parent), m_ctx {ctx}
 {
   connect(
       ctx.centralItem, SIGNAL(createObject(QString, qreal, qreal)), this,
@@ -97,7 +99,7 @@ void CentralItemModel::on_itemCreated(QString data, qreal x, qreal y)
       QQmlProperty(obj, "x").write(x - obj->width() / 2.);
       QQmlProperty(obj, "y").write(y - obj->height() / 2.);
 
-      addItem(new GUIItem{m_ctx, widget.widgetKind(), obj});
+      addItem(new GUIItem {m_ctx, widget.widgetKind(), obj});
     }
     else
     {
@@ -127,11 +129,11 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
       {
         // We try to create a relevant component according to the type of the
         // value.
-        auto comp_type = as->value.apply(AddressItemFactory{});
+        auto comp_type = as->value.apply(AddressItemFactory {});
 
         if (auto obj = create(comp_type))
         {
-          auto item = new GUIItem{m_ctx, comp_type, obj};
+          auto item = new GUIItem {m_ctx, comp_type, obj};
 
           item->setAddress(
               Device::FullAddressSettings::make<

@@ -1,17 +1,18 @@
 #pragma once
+#include <ossia/network/generic/generic_device.hpp>
+
+#include <QApplication>
+#include <QQmlApplicationEngine>
+
 #include <Models/CentralItemModel.hpp>
 #include <Models/NodeModel.hpp>
 #include <Models/WidgetListModel.hpp>
 #include <ZeroconfListener.hpp>
-#include <ossia/network/generic/generic_device.hpp>
-#include <QApplication>
-#include <QQmlApplicationEngine>
 
 namespace RemoteUI
 {
 
-class RemoteApplication final
-    : public QObject
+class RemoteApplication final : public QObject
 {
 public:
   RemoteApplication(int& argc, char** argv);
@@ -24,7 +25,7 @@ private:
   QApplication m_app;
   QQmlApplicationEngine m_engine;
 
-  RemoteUI::WidgetListModel m_widgets{m_engine};
+  RemoteUI::WidgetListModel m_widgets {m_engine};
   RemoteUI::NodeModel m_nodes;
 
   RemoteUI::Context m_context;

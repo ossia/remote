@@ -2,9 +2,10 @@
 // it. PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "NodeModel.hpp"
 
-#include <ossia/network/value/value_traits.hpp>
-#include <State/ValueConversion.hpp>
 #include <Device/ItemModels/NodeDisplayMethods.hpp>
+#include <State/ValueConversion.hpp>
+
+#include <ossia/network/value/value_traits.hpp>
 namespace RemoteUI
 {
 
@@ -21,11 +22,11 @@ void NodeModel::add_device(Device::Node n)
 void NodeModel::remove_device(QString n)
 {
   beginResetModel();
-  auto it = ossia::find_if(
-        m_root.children(),
-        [&] (const auto& cld) { return cld.displayName() == n; });
+  auto it = ossia::find_if(m_root.children(), [&](const auto& cld) {
+    return cld.displayName() == n;
+  });
 
-  if(it != m_root.end())
+  if (it != m_root.end())
     m_root.erase(it);
   endResetModel();
 }

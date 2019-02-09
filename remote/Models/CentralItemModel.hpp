@@ -1,9 +1,10 @@
 #ifndef CENTRALITEMMODEL_H
 #define CENTRALITEMMODEL_H
 
-#include <Models/WidgetListModel.hpp>
 #include <QObject>
 #include <QQuickItem>
+
+#include <Models/WidgetListModel.hpp>
 #include <RemoteContext.hpp>
 
 class QQmlApplicationEngine;

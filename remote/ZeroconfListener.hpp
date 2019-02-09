@@ -1,13 +1,13 @@
 #pragma once
-#include <servus/servus.h>
 #include <QTimer>
+
 #include <RemoteContext.hpp>
+#include <servus/servus.h>
 
 namespace RemoteUI
 {
 //! Periodically checks for new OSCQuery devices on the network
-class ZeroconfListener final
-    : public servus::Listener
+class ZeroconfListener final : public servus::Listener
 {
 public:
   ZeroconfListener(Context& ctx);

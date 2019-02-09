@@ -1,8 +1,10 @@
 #ifndef NODEMODEL_H
 #define NODEMODEL_H
 
-#include <QAbstractItemModel>
 #include <Device/Node/DeviceNode.hpp>
+
+#include <QAbstractItemModel>
+
 #include <unordered_map>
 
 namespace RemoteUI
@@ -33,8 +35,7 @@ public:
 private:
   using NodeType = Device::Node;
   QVariant headerData(
-      int section,
-      Qt::Orientation orientation,
+      int section, Qt::Orientation orientation,
       int role = Qt::DisplayRole) const override;
 
   int columnCount(const QModelIndex& parent = QModelIndex()) const override;

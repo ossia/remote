@@ -3,60 +3,69 @@
 #include "GUIItem.hpp"
 
 #include <Device/Node/DeviceNode.hpp>
+#include <State/Expression.hpp>
+#include <State/ValueParser.hpp>
+
 #include <Models/NodeModel.hpp>
 #include <Models/WidgetAddressSetup.hpp>
 #include <RemoteApplication.hpp>
 #include <RemoteContext.hpp>
-#include <State/Expression.hpp>
-#include <State/ValueParser.hpp>
 #include <WebSocketClient.hpp>
 namespace RemoteUI
 {
 
-template<typename Fun>
-void apply_to_address(const ossia::value& v, const ossia::domain& d, const ossia::unit_t& u, Fun&& f)
+template <typename Fun>
+void apply_to_address(
+    const ossia::value& v, const ossia::domain& d, const ossia::unit_t& u,
+    Fun&& f)
 {
-  if(v.valid())
+  if (v.valid())
   {
-    ossia::apply_nonnull([&] (const auto& v) {
-      if(d)
-      {
-        ossia::apply_nonnull([&] (const auto& dom) {
-          if(u)
+    ossia::apply_nonnull(
+        [&](const auto& v) {
+          if (d)
           {
-            ossia::apply_nonnull([&] (const auto& ds) {
-              ossia::apply_nonnull([&] (const auto& u) {
-                f(v, dom, u);
-              }, ds);
-            }, u.v);
+            ossia::apply_nonnull(
+                [&](const auto& dom) {
+                  if (u)
+                  {
+                    ossia::apply_nonnull(
+                        [&](const auto& ds) {
+                          ossia::apply_nonnull(
+                              [&](const auto& u) { f(v, dom, u); }, ds);
+                        },
+                        u.v);
+                  }
+                  else
+                  {
+                    f(v, dom, unused_t {});
+                  }
+                },
+                d.v);
           }
           else
           {
-            f(v, dom, unused_t{});
+            if (u)
+            {
+              ossia::apply_nonnull(
+                  [&](const auto& ds) {
+                    ossia::apply_nonnull(
+                        [&](const auto& u) { f(v, unused_t {}, u); }, ds);
+                  },
+                  u.v);
+            }
+            else
+            {
+              f(v, unused_t {}, unused_t {});
+            }
           }
-        }, d.v);
-      }
-      else
-      {
-        if(u)
-        {
-          ossia::apply_nonnull([&] (const auto& ds) {
-            ossia::apply_nonnull([&] (const auto& u) {
-              f(v, unused_t{}, u);
-            }, ds);
-          }, u.v);
-        }
-        else
-        {
-          f(v, unused_t{}, unused_t{});
-        }
-      }
-    }, v);
+        },
+        v);
   }
 }
 
 GUIItem::GUIItem(Context& ctx, WidgetKind c, QQuickItem* it)
-    : m_ctx{ctx}, m_compType{c}, m_item{it}
+    : m_ctx {ctx}, m_compType {c}, m_item {it}
 {
   connect(
       m_item, SIGNAL(addressChanged(QString)), this,
@@ -86,22 +95,24 @@ void GUIItem::setAddress(const Device::FullAddressSettings& addr)
     case WidgetKind::VSlider:
     case WidgetKind::HSlider:
     {
-      apply_to_address(addr.value, addr.domain.get(), addr.unit.get(), SetSliderAddress{*this, addr});
+      apply_to_address(
+          addr.value, addr.domain.get(), addr.unit.get(),
+          SetSliderAddress {*this, addr});
       break;
     }
     case WidgetKind::CheckBox:
     {
-      addr.value.apply(SetCheckboxAddress{*this, addr});
+      addr.value.apply(SetCheckboxAddress {*this, addr});
       break;
     }
     case WidgetKind::LineEdit:
     {
-      addr.value.apply(SetLineEditAddress{*this, addr});
+      addr.value.apply(SetLineEditAddress {*this, addr});
       break;
     }
     case WidgetKind::Label:
     {
-      addr.value.apply(SetLabelAddress{*this, addr});
+      addr.value.apply(SetLabelAddress {*this, addr});
       // Not editable
       break;
     }
@@ -188,14 +199,17 @@ void GUIItem::on_intValueChanged(qreal r)
 void GUIItem::sendMessage(const State::Address& m, const ossia::value& v)
 {
   auto dev_name = m.device.toStdString();
-  auto dev_it = ossia::find_if(m_ctx.device, [&] (const auto& dev) { return dev->get_name() == dev_name; });
-  if(dev_it != m_ctx.device.end())
+  auto dev_it = ossia::find_if(m_ctx.device, [&](const auto& dev) {
+    return dev->get_name() == dev_name;
+  });
+  if (dev_it != m_ctx.device.end())
   {
     auto& dev = **dev_it;
 
-    if(auto n = ossia::net::find_node(dev, ("/" + m.path.join("/")).toStdString()))
+    if (auto n
+        = ossia::net::find_node(dev, ("/" + m.path.join("/")).toStdString()))
     {
-      if(auto p = n->get_parameter())
+      if (auto p = n->get_parameter())
       {
         p->push_value(v);
       }

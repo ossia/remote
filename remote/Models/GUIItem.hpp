@@ -1,6 +1,8 @@
 #pragma once
 #include <Device/Address/AddressSettings.hpp>
+
 #include <QObject>
+
 #include <WidgetKind.hpp>
 namespace State
 {
@@ -30,7 +32,7 @@ public:
   {
     return m_item;
   }
-  void setAddress(const Device::FullAddressSettings&);
+  virtual void setAddress(const Device::FullAddressSettings&);
   void setValue(const State::Message& m);
 
   void enableListening(const Device::FullAddressSettings&);
@@ -44,12 +46,12 @@ Q_SIGNALS:
 private Q_SLOTS:
   void setAddress(QString);
 
-  void on_impulse();
-  void on_boolValueChanged(bool);
-  void on_intValueChanged(qreal);
-  void on_floatValueChanged(qreal);
-  void on_stringValueChanged(QString);
-  void on_parsableValueChanged(QString);
+    void on_impulse();
+    void on_boolValueChanged(bool);
+    void on_intValueChanged(qreal);
+    void on_floatValueChanged(qreal);
+    void on_stringValueChanged(QString);
+    void on_parsableValueChanged(QString);
 
 private:
   void sendMessage(const State::Address& m, const ossia::value& v);

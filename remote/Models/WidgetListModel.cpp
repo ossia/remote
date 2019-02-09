@@ -9,33 +9,33 @@ WidgetListData::~WidgetListData()
 
 WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
 {
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::HSlider, "HSlider", "Horizontal Slider","drag_hslider.png",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::HSlider, "HSlider", "Horizontal Slider", "drag_hslider.png",
       QUrl("qrc:///qml/widgets/dynamic/DynamicHSlider.qml"),
       QUrl("qrc:///qml/widgets/static/StaticHSlider.qml"), engine});
 
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::VSlider, "VSlider", "Vertical Slider","drag_vslider.png",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::VSlider, "VSlider", "Vertical Slider", "drag_vslider.png",
       QUrl("qrc:///qml/widgets/dynamic/DynamicVSlider.qml"),
       QUrl("qrc:///qml/widgets/static/StaticVSlider.qml"), engine});
 
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::CheckBox, "Switch", "CheckBox","drag_switch.png",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::CheckBox, "Switch", "CheckBox", "drag_switch.png",
       QUrl("qrc:///qml/widgets/dynamic/DynamicSwitch.qml"),
       QUrl("qrc:///qml/widgets/static/StaticSwitch.qml"), engine});
 
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::LineEdit, "LineEdit", "LineEdit","",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::LineEdit, "LineEdit", "LineEdit", "",
       QUrl("qrc:///qml/widgets/dynamic/DynamicLineEdit.qml"),
       QUrl("qrc:///qml/widgets/static/StaticLineEdit.qml"), engine});
 
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::Label, "Label", "Label","",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::Label, "Label", "Label", "",
       QUrl("qrc:///qml/widgets/dynamic/DynamicLabel.qml"),
       QUrl("qrc:///qml/widgets/static/StaticLabel.qml"), engine});
 
-  componentList.push_back(new RemoteUI::WidgetListData{
-      WidgetKind::PushButton, "Button", "Button","drag_switch.png",
+  componentList.push_back(new RemoteUI::WidgetListData {
+      WidgetKind::PushButton, "Button", "Button", "drag_switch.png",
       QUrl("qrc:///qml/widgets/dynamic/DynamicButton.qml"),
       QUrl("qrc:///qml/widgets/static/StaticButton.qml"), engine});
 

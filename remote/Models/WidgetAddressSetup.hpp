@@ -1,11 +1,13 @@
 #pragma once
+#include <Device/Address/AddressSettings.hpp>
+#include <State/ValueConversion.hpp>
+
 #include <ossia/network/domain/domain.hpp>
 
-#include <Device/Address/AddressSettings.hpp>
-#include <Models/GUIItem.hpp>
 #include <QQmlProperty>
-#include <State/ValueConversion.hpp>
 #include <QQuickItem>
+
+#include <Models/GUIItem.hpp>
 
 namespace RemoteUI
 {
@@ -15,8 +17,7 @@ struct SetSliderAddress
   GUIItem& item;
   const Device::FullAddressSettings& address;
 
-
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(State::impulse c, const D&, const U&)
   {
     // Do nothing
@@ -24,7 +25,7 @@ struct SetSliderAddress
         item.item(), SIGNAL(clicked()), &item, SLOT(on_impulse()));
   }
 
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(bool c, const D&, const U&)
   {
     QQmlProperty(item.item(), "from").write(0.);
@@ -35,7 +36,7 @@ struct SetSliderAddress
         item.item(), SIGNAL(toggled()), &item, SLOT(on_impulse()));
   }
 
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(int i, const D&, const U&)
   {
     QQmlProperty(item.item(), "from").write((qreal)0);
@@ -48,14 +49,13 @@ struct SetSliderAddress
         SLOT(on_intValueChanged(qreal)));
   }
 
-
-  template<typename U>
+  template <typename U>
   void operator()(int i, const ossia::domain_base<int>& d, const U& u)
   {
-    if(d.min)
+    if (d.min)
       QQmlProperty(item.item(), "from").write((qreal)*d.min);
 
-    if(d.max)
+    if (d.max)
       QQmlProperty(item.item(), "to").write((qreal)*d.max);
 
     QQmlProperty(item.item(), "slider.stepSize").write(1);
@@ -66,7 +66,7 @@ struct SetSliderAddress
         SLOT(on_intValueChanged(qreal)));
   }
 
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(float f, const D&, const U&)
   {
     QQmlProperty(item.item(), "from").write(0.);
@@ -79,13 +79,13 @@ struct SetSliderAddress
         SLOT(on_floatValueChanged(qreal)));
   }
 
-  template<typename U>
+  template <typename U>
   void operator()(float f, const ossia::domain_base<float>& d, const U& u)
   {
-    if(d.min)
+    if (d.min)
       QQmlProperty(item.item(), "from").write((qreal)*d.min);
 
-    if(d.max)
+    if (d.max)
       QQmlProperty(item.item(), "to").write((qreal)*d.max);
 
     QQmlProperty(item.item(), "slider.value").write((qreal)f);
@@ -95,7 +95,7 @@ struct SetSliderAddress
         SLOT(on_floatValueChanged(qreal)));
   }
 
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(char c, const D&, const U&)
   {
     QQmlProperty(item.item(), "min_chars").write(1);
@@ -103,7 +103,7 @@ struct SetSliderAddress
     QQmlProperty(item.item(), "value").write(c);
   }
 
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(const std::string& s, const D&, const U&)
   {
     QQmlProperty(item.item(), "value").write(QString::fromStdString(s));
@@ -115,42 +115,42 @@ struct SetSliderAddress
     // TODO multislider
   }
 
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::rgba8_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::argb8_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::rgba_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::argb_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 3> c, const D&, const ossia::hsv_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 3> c, const D&, const ossia::rgb_u&)
   {
     // TODO
   }
-  template<typename D>
+  template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::bgr_u&)
   {
     // TODO
   }
-  template<typename D, typename U>
+  template <typename D, typename U>
   void operator()(const std::vector<ossia::value>& c, const D&, const U&)
   {
     // TODO
