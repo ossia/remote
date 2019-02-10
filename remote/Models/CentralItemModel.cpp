@@ -3,7 +3,7 @@
 #include "CentralItemModel.hpp"
 
 #include "WidgetListModel.hpp"
-
+#include "Items.hpp"
 #include <Device/Node/DeviceNode.hpp>
 
 #include <QDebug>
@@ -19,50 +19,69 @@ namespace RemoteUI
 // Type to widget
 struct AddressItemFactory
 {
-  auto operator()()
+  using return_type = GUIItem*;
+  Context& m_ctx;
+
+
+  GUIItem* createItem(const QString& name) const
   {
-    throw std::runtime_error("no item");
-    return WidgetKind::PushButton;
-  }
-  auto operator()(ossia::impulse i)
-  {
-    return WidgetKind::PushButton;
+    auto w = m_ctx.widgets[name];
+    auto comp = w->component();
+    auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
+    QQmlProperty(obj, "parent")
+        .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
+    return w->widgetFactory()(m_ctx, obj);
   }
 
-  auto operator()(bool b)
+  template <typename T, typename D, typename U>
+  GUIItem* operator()(const T&, const D&, const U&) const
   {
-    return WidgetKind::CheckBox;
+    std::cerr << "TODO: " << typeid(T).name() << " ... " << typeid(D).name() << " ... " << typeid(U).name() << std::endl;
+    return nullptr;
   }
 
-  auto operator()(int i)
+  template <typename D, typename U>
+  GUIItem* operator()(float, const D&, const U&) const
   {
-    return WidgetKind::HSlider;
+    return createItem("HSlider");
   }
 
-  auto operator()(float f)
+  template <typename D, typename U>
+  GUIItem* operator()(int, const D&, const U&) const
   {
-    return WidgetKind::HSlider;
+    return createItem("HSlider");
   }
 
-  auto operator()(const std::string& s)
+  template <typename D, typename U>
+  GUIItem* operator()(ossia::impulse, const D&, const U&) const
   {
-    return WidgetKind::LineEdit;
+    return createItem("Button");
   }
 
-  auto operator()(char c)
+  template <typename D, typename U>
+  GUIItem* operator()(bool, const D&, const U&) const
   {
-    return WidgetKind::LineEdit;
+    return createItem("Switch");
   }
-
-  template <std::size_t N>
-  auto operator()(std::array<float, N> c)
+  template <typename D, typename U>
+  GUIItem* operator()(const std::string& v, const D&, const U&) const
   {
-    return WidgetKind::Label;
+    return createItem("LineEdit");
   }
-
-  auto operator()(const std::vector<ossia::value>& c)
+  template <typename D, typename U>
+  GUIItem* operator()(char , const D&, const U&) const
   {
-    return WidgetKind::Label;
+    return createItem("LineEdit");
+  }
+  template <std::size_t N, typename D, typename U>
+  GUIItem* operator()(std::array<float, N> arr , const D&, const U&) const
+  {
+    return nullptr; //createItem("LineEdit");
+  }
+  template <typename D, typename U>
+  GUIItem* operator()(const std::vector<ossia::value>& c, const D&, const U&) const
+  {
+    return nullptr; //createItem("LineEdit");
   }
 };
 
@@ -78,22 +97,18 @@ CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
 }
 
 
-QQuickItem* CentralItemModel::create(WidgetKind c)
+QQuickItem* CentralItemModel::create(const QString& c)
 {
-  // UGH
-  auto comp = m_ctx.widgets[(int)c]->component();
+  auto comp = m_ctx.widgets[c]->component();
   auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
   QQmlProperty(obj, "parent")
       .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
   return obj;
 }
 
-void CentralItemModel::on_itemCreated(QString data, qreal x, qreal y)
+void CentralItemModel::on_itemCreated(QString widgetName, qreal x, qreal y)
 {
-  auto it = std::find_if(
-      m_ctx.widgets.begin(), m_ctx.widgets.end(),
-      [&](RemoteUI::WidgetListData* obj) { return obj->name() == data; });
-
+  auto it = m_ctx.widgets.find(widgetName);
   if (it != m_ctx.widgets.end())
   {
     WidgetListData& widget = *(*it);
@@ -110,11 +125,11 @@ void CentralItemModel::on_itemCreated(QString data, qreal x, qreal y)
       QQmlProperty(obj, "x").write(x - obj->width() / 2.);
       QQmlProperty(obj, "y").write(y - obj->height() / 2.);
 
-      addItem(widget.widgetFactory()(m_ctx, widget.widgetKind(), obj));
+      addItem(widget.widgetFactory()(m_ctx, obj));
     }
     else
     {
-      qDebug() << "Error: object " << data << "could not be created";
+      qDebug() << "Error: object " << widgetName << "could not be created";
     }
   }
 }
@@ -131,16 +146,16 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
       {
         // We try to create a relevant component according to the type of the
         // value.
-        auto comp_type = as->value.apply(AddressItemFactory {});
+        auto item = apply_to_address(*as, AddressItemFactory {m_ctx});
 
-        if (auto obj = create(comp_type))
+
+        if (item)
         {
-          auto item = m_ctx.widgets[(int)comp_type]->widgetFactory()(m_ctx, comp_type, obj);
-
           item->setAddress(
               Device::FullAddressSettings::make<
                   Device::FullAddressSettings::as_child>(*as, *address));
 
+          auto obj = item->item();
           // Put its center where the mouse is
           QQmlProperty(obj, "x").write(x - obj->width() / 2.);
           QQmlProperty(obj, "y").write(y - obj->height() / 2.);

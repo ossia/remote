@@ -17,8 +17,8 @@ namespace RemoteUI
 {
 
 
-GUIItem::GUIItem(Context& ctx, WidgetKind c, QQuickItem* it)
-    : m_ctx {ctx}, m_compType {c}, m_item {it}
+GUIItem::GUIItem(Context& ctx, QQuickItem* it)
+    : m_ctx {ctx}, m_item {it}
 {
   connect(
       m_item, SIGNAL(addressChanged(QString)), this,

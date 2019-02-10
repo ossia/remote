@@ -6,53 +6,72 @@ namespace RemoteUI
 {
 
 template <typename Fun>
-void apply_to_address(
+auto apply_to_address(
     const ossia::value& v, const ossia::domain& d, const ossia::unit_t& u,
     Fun&& f)
+  -> typename Fun::return_type
 {
+  using return_type = typename Fun::return_type;
   if (v.valid())
   {
-    ossia::apply_nonnull(
-        [&](const auto& v) {
-          if (d)
+    return ossia::apply_nonnull(
+          [&](const auto& v) -> return_type {
+      if (d)
+      {
+        return ossia::apply_nonnull(
+              [&](const auto& dom) -> return_type {
+          if (u)
           {
-            ossia::apply_nonnull(
-                [&](const auto& dom) {
-                  if (u)
-                  {
-                    ossia::apply_nonnull(
-                        [&](const auto& ds) {
-                          ossia::apply_nonnull(
-                              [&](const auto& u) { f(v, dom, u); }, ds);
-                        },
-                        u.v);
-                  }
-                  else
-                  {
-                    f(v, dom, unused_t {});
-                  }
-                },
-                d.v);
+            return ossia::apply_nonnull(
+                  [&](const auto& ds) -> return_type {
+              return ossia::apply_nonnull(
+                    [&](const auto& u) -> return_type {
+                return f(v, dom, u);
+              }, ds);
+            },
+            u.v);
           }
           else
           {
-            if (u)
-            {
-              ossia::apply_nonnull(
-                  [&](const auto& ds) {
-                    ossia::apply_nonnull(
-                        [&](const auto& u) { f(v, unused_t {}, u); }, ds);
-                  },
-                  u.v);
-            }
-            else
-            {
-              f(v, unused_t {}, unused_t {});
-            }
+            return f(v, dom, unused_t {});
           }
         },
-        v);
+        d.v);
+      }
+      else
+      {
+        if (u)
+        {
+          return ossia::apply_nonnull(
+                [&](const auto& ds) -> return_type {
+            return ossia::apply_nonnull(
+                  [&](const auto& u) -> return_type {
+              return f(v, unused_t {}, u); }, ds);
+          },
+          u.v);
+        }
+        else
+        {
+          return f(v, unused_t {}, unused_t {});
+        }
+      }
+    },
+    v);
   }
+
+  if constexpr(!std::is_same_v<return_type, void>)
+      return {};
+}
+
+// AddressSettings or FullAddressSettings
+template <typename Addr, typename Fun>
+auto apply_to_address(
+    const Addr& addr,
+    Fun&& f)
+{
+  return apply_to_address(
+        addr.value, addr.domain.get(), addr.unit.get(),
+        std::forward<Fun>(f));
 }
 
 class Slider
@@ -63,11 +82,7 @@ public:
   using GUIItem::GUIItem;
 
 public Q_SLOTS:
-  void on_intValueChanged(qreal r)
-  {
-    sendMessage(m_addr.address, (int) r);
-  }
-  void on_floatValueChanged(qreal r)
+  void on_valueChanged(qreal r)
   {
     sendMessage(m_addr.address, (float)r);
   }
@@ -75,9 +90,7 @@ public Q_SLOTS:
 private:
   void setAddressImpl(const Device::FullAddressSettings& addr) override
   {
-    apply_to_address(
-        addr.value, addr.domain.get(), addr.unit.get(),
-        SetSliderAddress {*this, addr});
+    apply_to_address(addr, SetSliderAddress {*this, addr});
   }
 
   void setValue(const State::Message& m)
@@ -93,7 +106,7 @@ public:
   using GUIItem::GUIItem;
 
 public Q_SLOTS:
-  void on_boolValueChanged(bool b)
+  void on_valueChanged(bool b)
   {
     sendMessage(m_addr.address, b);
   }
@@ -123,7 +136,7 @@ public Q_SLOTS:
       sendMessage(m_addr.address, *val);
     }
   }
-  void on_stringValueChanged(QString str)
+  void on_valueChanged(QString str)
   {
     sendMessage(m_addr.address, str.toStdString());
   }
@@ -166,7 +179,7 @@ public:
   using GUIItem::GUIItem;
 
 public Q_SLOTS:
-  void on_impulse()
+  void on_valueChanged()
   {
     sendMessage(m_addr.address, ossia::impulse{});
   }
@@ -175,11 +188,82 @@ private:
   void setAddressImpl(const Device::FullAddressSettings& addr) override
   {
     m_connection = QObject::connect(
-        item(), SIGNAL(clicked()), this, SLOT(on_impulse()));
+          item(), SIGNAL(clicked()), this, SLOT(on_valueChanged()));
   }
   void setValue(const State::Message& m)
   {
   }
 };
 
+class RGBSlider
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+public Q_SLOTS:
+  void on_rgba8Changed(const QVariantList& lst)
+  {
+    std::array<float, 4> val{
+      lst[0].toFloat()
+          , lst[1].toFloat()
+          , lst[2].toFloat()
+          , lst[3].toFloat()
+    };
+    val = ossia::rgba8{ossia::rgba{val}}.dataspace_value;
+    sendMessage(m_addr.address, val);
+  }
+  void on_argb8Changed(const QVariantList& lst)
+  {
+    std::array<float, 4> val{
+      lst[0].toFloat()
+          , lst[1].toFloat()
+          , lst[2].toFloat()
+          , lst[3].toFloat()
+    };
+    val = ossia::argb8{ossia::rgba{val}}.dataspace_value;
+    sendMessage(m_addr.address, val);
+  }
+  void on_rgbaChanged(const QVariantList& lst)
+  {
+    std::array<float, 4> val{
+      lst[0].toFloat()
+          , lst[1].toFloat()
+          , lst[2].toFloat()
+          , lst[3].toFloat()
+    };
+    sendMessage(m_addr.address, val);
+  }
+  void on_argbChanged(const QVariantList& lst)
+  {
+    std::array<float, 4> val{
+      lst[0].toFloat()
+          , lst[1].toFloat()
+          , lst[2].toFloat()
+          , lst[3].toFloat()
+    };
+    val = ossia::argb{ossia::rgba{val}}.dataspace_value;
+    sendMessage(m_addr.address, val);
+  }
+
+  void on_rgbChanged(const QVariantList& lst)
+  {
+    std::array<float, 3> val{
+      lst[0].toFloat()
+          , lst[1].toFloat()
+          , lst[2].toFloat()
+    };
+    sendMessage(m_addr.address, val);
+  }
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override
+  {
+    apply_to_address(addr, SetRGBAddress {*this, addr});
+  }
+  void setValue(const State::Message& m) override
+  {
+  }
+};
 }

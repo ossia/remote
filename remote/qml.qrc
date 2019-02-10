@@ -8,32 +8,24 @@
         <file>qml/NodeTree.qml</file>
         <file>qml/CentralAreaForm.ui.qml</file>
         <file>qml/WidgetListForm.ui.qml</file>
-        <file>qml/widgets/static/StaticButton.qml</file>
-        <file>qml/widgets/static/StaticLabel.qml</file>
-        <file>qml/widgets/static/StaticLineEdit.qml</file>
-        <file>qml/widgets/static/StaticSlider.qml</file>
-        <file>qml/widgets/static/StaticHSlider.qml</file>
-        <file>qml/widgets/static/StaticVSlider.qml</file>
-        <file>qml/widgets/static/StaticSwitch.qml</file>
-        <file>qml/widgets/dynamic/DynamicButton.qml</file>
-        <file>qml/widgets/dynamic/DynamicButtonForm.ui.qml</file>
-        <file>qml/widgets/dynamic/DynamicHSlider.qml</file>
-        <file>qml/widgets/dynamic/DynamicHSliderForm.ui.qml</file>
-        <file>qml/widgets/dynamic/DynamicLineEdit.qml</file>
-        <file>qml/widgets/dynamic/DynamicLineEditForm.ui.qml</file>
-        <file>qml/widgets/dynamic/DynamicSwitch.qml</file>
-        <file>qml/widgets/dynamic/DynamicSwitchForm.ui.qml</file>
-        <file>qml/widgets/dynamic/DynamicVSlider.qml</file>
-        <file>qml/widgets/dynamic/DynamicVSliderForm.ui.qml</file>
-        <file>qml/widgets/dynamic/AddressDrop.qml</file>
-        <file>qml/widgets/dynamic/AddressLabel.qml</file>
-        <file>qml/widgets/dynamic/DynamicLabel.qml</file>
-        <file>qml/widgets/dynamic/DynamicLabelForm.ui.qml</file>
+        <file>qml/widgets/DynamicButton.qml</file>
+        <file>qml/widgets/DynamicButtonForm.ui.qml</file>
+        <file>qml/widgets/DynamicHSlider.qml</file>
+        <file>qml/widgets/DynamicHSliderForm.ui.qml</file>
+        <file>qml/widgets/DynamicLineEdit.qml</file>
+        <file>qml/widgets/DynamicLineEditForm.ui.qml</file>
+        <file>qml/widgets/DynamicSwitch.qml</file>
+        <file>qml/widgets/DynamicSwitchForm.ui.qml</file>
+        <file>qml/widgets/DynamicVSlider.qml</file>
+        <file>qml/widgets/DynamicVSliderForm.ui.qml</file>
+        <file>qml/widgets/AddressDrop.qml</file>
+        <file>qml/widgets/AddressLabel.qml</file>
+        <file>qml/widgets/DynamicLabel.qml</file>
+        <file>qml/widgets/DynamicLabelForm.ui.qml</file>
         <file>resources/slider.png</file>
         <file>resources/switch.png</file>
         <file>resources/drag_switch.png</file>
         <file>resources/drag_hslider.png</file>
         <file>resources/drag_vslider.png</file>
-
     </qresource>
 </RCC>

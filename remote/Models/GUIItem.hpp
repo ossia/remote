@@ -3,7 +3,6 @@
 
 #include <QObject>
 
-#include <WidgetKind.hpp>
 namespace State
 {
 struct Message;
@@ -23,9 +22,10 @@ class GUIItem : public QObject
   friend struct SetSliderAddress;
   friend struct SetCheckboxAddress;
   friend struct SetLineEditAddress;
+  friend struct SetRGBAddress;
 
 public:
-  GUIItem(Context& ctx, WidgetKind c, QQuickItem* it);
+  GUIItem(Context& ctx, QQuickItem* it);
   ~GUIItem();
 
   QQuickItem* item() const
@@ -53,7 +53,6 @@ protected:
   void sendMessage(const State::Address& m, const ossia::value& v);
   Context& m_ctx;
 
-  WidgetKind m_compType;
   QQuickItem* m_item;
   Device::FullAddressSettings m_addr;
   QMetaObject::Connection m_connection;

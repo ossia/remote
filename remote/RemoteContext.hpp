@@ -20,7 +20,7 @@ class RemoteApplication;
 struct Context
 {
   Context(
-      QQmlApplicationEngine& e, const QList<RemoteUI::WidgetListData*>& w,
+      QQmlApplicationEngine& e, const QHash<QString, RemoteUI::WidgetListData*>& w,
       NodeModel& n,
       std::vector<std::unique_ptr<ossia::net::generic_device>>& d,
       RemoteApplication& app, QQuickItem* i)
@@ -33,7 +33,7 @@ struct Context
   {
   }
   QQmlApplicationEngine& engine;
-  const QList<RemoteUI::WidgetListData*>& widgets;
+  const QHash<QString, RemoteUI::WidgetListData*>& widgets;
   NodeModel& nodes;
   std::vector<std::unique_ptr<ossia::net::generic_device>>& device;
   RemoteApplication& application;

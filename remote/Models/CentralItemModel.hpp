@@ -30,7 +30,7 @@ public Q_SLOTS:
 private:
   Context& m_ctx;
   QList<GUIItem*> m_guiItems;
-  QQuickItem* create(WidgetKind c);
+  QQuickItem* create(const QString& c);
 };
 }
 #endif // CENTRALITEMMODEL_H

@@ -19,47 +19,47 @@ auto factory()
 
 WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
 {
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::HSlider, "HSlider", "Horizontal Slider", "drag_hslider.png",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicHSlider.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticHSlider.qml"),
+  componentList["HSlider"] = new RemoteUI::WidgetListData {
+      "HSlider", "Horizontal Slider", "drag_hslider.png",
+      QUrl("qrc:///qml/widgets/DynamicHSlider.qml"),
+      QUrl("qrc:///resources/slider.png"),
       factory<Slider>(),
-      engine});
+      engine};
 
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::VSlider, "VSlider", "Vertical Slider", "drag_vslider.png",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicVSlider.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticVSlider.qml"),
+  componentList["VSlider"] = new RemoteUI::WidgetListData {
+      "VSlider", "Vertical Slider", "drag_vslider.png",
+      QUrl("qrc:///qml/widgets/DynamicVSlider.qml"),
+      QUrl("qrc:///resources/slider.png"),
       factory<Slider>(),
-      engine});
+      engine};
 
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::CheckBox, "Switch", "CheckBox", "drag_switch.png",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicSwitch.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticSwitch.qml"),
+  componentList["Switch"] = new RemoteUI::WidgetListData {
+      "Switch", "CheckBox", "drag_switch.png",
+      QUrl("qrc:///qml/widgets/DynamicSwitch.qml"),
+      QUrl("qrc:///resources/switch.png"),
       factory<CheckBox>(),
-      engine});
+      engine};
 
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::LineEdit, "LineEdit", "LineEdit", "",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicLineEdit.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticLineEdit.qml"),
+  componentList["LineEdit"] = new RemoteUI::WidgetListData {
+      "LineEdit", "LineEdit", "",
+      QUrl("qrc:///qml/widgets/DynamicLineEdit.qml"),
+      QUrl(),
       factory<LineEdit>(),
-      engine});
+      engine};
 
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::Label, "Label", "Label", "",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicLabel.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticLabel.qml"),
+  componentList["Label"] = new RemoteUI::WidgetListData {
+      "Label", "Label", "",
+      QUrl("qrc:///qml/widgets/DynamicLabel.qml"),
+      QUrl(),
       factory<Label>(),
-      engine});
+      engine};
 
-  componentList.push_back(new RemoteUI::WidgetListData {
-      WidgetKind::PushButton, "Button", "Button", "drag_switch.png",
-      QUrl("qrc:///qml/widgets/dynamic/DynamicButton.qml"),
-      QUrl("qrc:///qml/widgets/static/StaticButton.qml"),
+  componentList["Button"] = new RemoteUI::WidgetListData {
+      "Button", "Button", "drag_switch.png",
+      QUrl("qrc:///qml/widgets/DynamicButton.qml"),
+      QUrl("qrc:///resources/switch.png"),
       factory<PushButton>(),
-      engine});
+      engine};
 
   // QML absolutely wants a QList<QObject*>
   for (auto l : componentList)

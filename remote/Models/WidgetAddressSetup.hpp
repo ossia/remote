@@ -14,6 +14,7 @@ namespace RemoteUI
 
 struct SetSliderAddress
 {
+  using return_type = void;
   GUIItem& item;
   const Device::FullAddressSettings& address;
 
@@ -30,7 +31,7 @@ struct SetSliderAddress
     QQmlProperty(item.item(), "slider.stepSize").write(1);
     QQmlProperty(item.item(), "slider.value").write((qreal)c);
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(qreal)), &item, SLOT(on_intValueChanged(qreal)));
+        item.item(), SIGNAL(valueChange(qreal)), &item, SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D, typename U>
@@ -43,7 +44,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_intValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename U>
@@ -60,7 +61,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_intValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D, typename U>
@@ -73,7 +74,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename U>
@@ -89,7 +90,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D, typename U>
@@ -120,7 +121,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D>
@@ -133,7 +134,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D>
@@ -146,7 +147,7 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 
   template <typename D, typename U>
@@ -159,12 +160,13 @@ struct SetSliderAddress
 
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(qreal)), &item,
-        SLOT(on_floatValueChanged(qreal)));
+        SLOT(on_valueChanged(qreal)));
   }
 };
 
 struct SetCheckboxAddress
 {
+  using return_type = void;
   GUIItem& item;
   const Device::FullAddressSettings& address;
 
@@ -183,21 +185,21 @@ struct SetCheckboxAddress
   {
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(bool)), &item,
-        SLOT(on_boolValueChanged(bool)));
+        SLOT(on_valueChanged(bool)));
   }
 
   void operator()(int i)
   {
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(bool)), &item,
-        SLOT(on_boolValueChanged(bool)));
+        SLOT(on_valueChanged(bool)));
   }
 
   void operator()(float f)
   {
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(valueChange(bool)), &item,
-        SLOT(on_boolValueChanged(bool)));
+        SLOT(on_valueChanged(bool)));
   }
 
   template<typename Arg>
@@ -208,6 +210,7 @@ struct SetCheckboxAddress
 
 struct SetLineEditAddress
 {
+  using return_type = void;
   GUIItem& item;
   const Device::FullAddressSettings& address;
 
@@ -251,7 +254,7 @@ struct SetLineEditAddress
   {
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(textChange(QString)), &item,
-        SLOT(on_stringValueChanged(QString)));
+        SLOT(on_valueChanged(QString)));
   }
 
   template <std::size_t N>
@@ -272,6 +275,7 @@ struct SetLineEditAddress
 
 struct SetLabelAddress
 {
+  using return_type = void;
   GUIItem& item;
   const Device::FullAddressSettings& address;
 
@@ -323,6 +327,81 @@ struct SetLabelAddress
   {
     QQmlProperty(item.item(), "text.text")
         .write("List" + State::convert::value<QString>(c));
+  }
+};
+
+struct SetRGBAddress
+{
+  using return_type = void;
+  GUIItem& item;
+  const Device::FullAddressSettings& address;
+
+  void operator()()
+  {
+  }
+
+  template <typename D>
+  void operator()(std::array<float, 4> c, const D&, const ossia::rgba8_u&)
+  {
+    c = ossia::rgba{ossia::rgba8{c}}.dataspace_value;
+    QQmlProperty(item.item(), "slider.enableAplha").write(true);
+    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(QVariantList)), &item,
+        SLOT(on_rgba8Changed(QVariantList)));
+  }
+
+  template <typename D>
+  void operator()(std::array<float, 4> c, const D&, const ossia::argb8_u&)
+  {
+    c = ossia::rgba{ossia::argb8{c}}.dataspace_value;
+    QQmlProperty(item.item(), "slider.enableAplha").write(true);
+    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(QVariantList)), &item,
+        SLOT(on_argb8Changed(QVariantList)));
+  }
+
+
+  template <typename D>
+  void operator()(std::array<float, 4> c, const D&, const ossia::rgba_u&)
+  {
+    QQmlProperty(item.item(), "slider.enableAplha").write(true);
+    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(QVariantList)), &item,
+        SLOT(on_rgbaChanged(QVariantList)));
+  }
+
+  template <typename D>
+  void operator()(std::array<float, 4> c, const D&, const ossia::argb_u&)
+  {
+    c = ossia::rgba{ossia::argb{c}}.dataspace_value;
+    QQmlProperty(item.item(), "slider.enableAplha").write(true);
+    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(QVariantList)), &item,
+        SLOT(on_argbChanged(QVariantList)));
+  }
+
+  template <typename D>
+  void operator()(std::array<float, 3> c, const D&, const ossia::rgb_u&)
+  {
+    QQmlProperty(item.item(), "slider.enableAplha").write(true);
+    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2]);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(QVariantList)), &item,
+        SLOT(on_rgbChanged(QVariantList)));
+  }
+
+  template<typename... Arg>
+  void operator()(const Arg&... c)
+  {
   }
 };
 }

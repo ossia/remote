@@ -71,10 +71,11 @@ Item {
                      color: "#161516"
                 }
             }
+            Image {
+                source: image
+            }
 
             Component.onCompleted: {
-                var obj = exampleComponent.createObject(delegateLayout, {});
-                obj.enabled = false;
                 itemFiller.createObject(delegateLayout, {});
             }
 
