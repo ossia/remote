@@ -3,7 +3,7 @@ namespace RemoteUI
 {
 
 //! TODO get rid of this
-enum WidgetKind
+enum class WidgetKind
 {
   HSlider,
   VSlider,

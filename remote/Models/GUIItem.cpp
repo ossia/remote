@@ -7,62 +7,15 @@
 #include <State/ValueParser.hpp>
 
 #include <Models/NodeModel.hpp>
-#include <Models/WidgetAddressSetup.hpp>
 #include <RemoteApplication.hpp>
 #include <RemoteContext.hpp>
 #include <WebSocketClient.hpp>
+
+#include <QQmlProperty>
+
 namespace RemoteUI
 {
 
-template <typename Fun>
-void apply_to_address(
-    const ossia::value& v, const ossia::domain& d, const ossia::unit_t& u,
-    Fun&& f)
-{
-  if (v.valid())
-  {
-    ossia::apply_nonnull(
-        [&](const auto& v) {
-          if (d)
-          {
-            ossia::apply_nonnull(
-                [&](const auto& dom) {
-                  if (u)
-                  {
-                    ossia::apply_nonnull(
-                        [&](const auto& ds) {
-                          ossia::apply_nonnull(
-                              [&](const auto& u) { f(v, dom, u); }, ds);
-                        },
-                        u.v);
-                  }
-                  else
-                  {
-                    f(v, dom, unused_t {});
-                  }
-                },
-                d.v);
-          }
-          else
-          {
-            if (u)
-            {
-              ossia::apply_nonnull(
-                  [&](const auto& ds) {
-                    ossia::apply_nonnull(
-                        [&](const auto& u) { f(v, unused_t {}, u); }, ds);
-                  },
-                  u.v);
-            }
-            else
-            {
-              f(v, unused_t {}, unused_t {});
-            }
-          }
-        },
-        v);
-  }
-}
 
 GUIItem::GUIItem(Context& ctx, WidgetKind c, QQuickItem* it)
     : m_ctx {ctx}, m_compType {c}, m_item {it}
@@ -83,50 +36,6 @@ GUIItem::~GUIItem()
   QObject::disconnect(m_connection);
 
   m_item->deleteLater();
-}
-
-void GUIItem::setAddress(const Device::FullAddressSettings& addr)
-{
-  m_addr = addr;
-
-  QObject::disconnect(m_connection);
-  switch (m_compType)
-  {
-    case WidgetKind::VSlider:
-    case WidgetKind::HSlider:
-    {
-      apply_to_address(
-          addr.value, addr.domain.get(), addr.unit.get(),
-          SetSliderAddress {*this, addr});
-      break;
-    }
-    case WidgetKind::CheckBox:
-    {
-      addr.value.apply(SetCheckboxAddress {*this, addr});
-      break;
-    }
-    case WidgetKind::LineEdit:
-    {
-      addr.value.apply(SetLineEditAddress {*this, addr});
-      break;
-    }
-    case WidgetKind::Label:
-    {
-      addr.value.apply(SetLabelAddress {*this, addr});
-      // Not editable
-      break;
-    }
-    case WidgetKind::PushButton:
-    {
-      m_connection = QObject::connect(
-          item(), SIGNAL(clicked()), this, SLOT(on_impulse()));
-      break;
-    }
-    default:
-      break;
-  }
-
-  QQmlProperty(m_item, "label.text").write(addr.address.toString());
 }
 
 qreal GUIItem::x() const
@@ -150,51 +59,20 @@ void GUIItem::setAddress(QString data)
       if (as && as->value.valid())
       {
         setAddress(Device::FullAddressSettings::make<
-                   Device::FullAddressSettings::as_child>(*as, *address));
+                 Device::FullAddressSettings::as_child>(*as, *address));
       }
     }
   }
 }
 
-void GUIItem::setValue(const State::Message& m)
+void GUIItem::setAddress(const Device::FullAddressSettings& addr)
 {
-  if (m_compType == WidgetKind::Label)
-    m.value.apply(SetLabelAddress{*this, m_addr});
-}
+  m_addr = addr;
 
-void GUIItem::on_impulse()
-{
-  sendMessage(m_addr.address, ossia::impulse{});
-}
+  setAddressImpl(m_addr);
 
-void GUIItem::on_boolValueChanged(bool b)
-{
-  sendMessage(m_addr.address, b);
+  QQmlProperty(m_item, "label.text").write(m_addr.address.toString());
 }
-
-void GUIItem::on_floatValueChanged(qreal r)
-{
-  sendMessage(m_addr.address, (float)r);
-}
-
-void GUIItem::on_stringValueChanged(QString str)
-{
-  sendMessage(m_addr.address, str.toStdString());
-}
-
-void GUIItem::on_parsableValueChanged(QString s)
-{
-  if (auto val = State::parseValue(s.toStdString()))
-  {
-    sendMessage(m_addr.address, *val);
-  }
-}
-
-void GUIItem::on_intValueChanged(qreal r)
-{
-  sendMessage(m_addr.address, (int) r);
-}
-
 
 void GUIItem::sendMessage(const State::Address& m, const ossia::value& v)
 {

@@ -57,6 +57,7 @@ set(SRCS
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/WidgetListModel.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/WidgetAddressSetup.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/GUIItem.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/Items.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/RemoteApplication.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/RemoteContext.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/WidgetKind.hpp"

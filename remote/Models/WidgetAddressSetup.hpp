@@ -20,9 +20,6 @@ struct SetSliderAddress
   template <typename D, typename U>
   void operator()(State::impulse c, const D&, const U&)
   {
-    // Do nothing
-    item.m_connection = QObject::connect(
-        item.item(), SIGNAL(clicked()), &item, SLOT(on_impulse()));
   }
 
   template <typename D, typename U>
@@ -33,7 +30,7 @@ struct SetSliderAddress
     QQmlProperty(item.item(), "slider.stepSize").write(1);
     QQmlProperty(item.item(), "slider.value").write((qreal)c);
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(toggled()), &item, SLOT(on_impulse()));
+        item.item(), SIGNAL(valueChange(qreal)), &item, SLOT(on_intValueChanged(qreal)));
   }
 
   template <typename D, typename U>
@@ -98,62 +95,71 @@ struct SetSliderAddress
   template <typename D, typename U>
   void operator()(char c, const D&, const U&)
   {
+    /*
     QQmlProperty(item.item(), "min_chars").write(1);
     QQmlProperty(item.item(), "max_chars").write(1);
     QQmlProperty(item.item(), "value").write(c);
+    */
   }
 
   template <typename D, typename U>
   void operator()(const std::string& s, const D&, const U&)
   {
+    /*
     QQmlProperty(item.item(), "value").write(QString::fromStdString(s));
+    */
   }
 
   template <std::size_t N, typename D, typename U>
   void operator()(std::array<float, N> c, const D&, const U&)
   {
-    // TODO multislider
+    QQmlProperty(item.item(), "from").write(0.);
+    QQmlProperty(item.item(), "to").write(1.);
+
+    QQmlProperty(item.item(), "slider.value").write(0.);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(qreal)), &item,
+        SLOT(on_floatValueChanged(qreal)));
   }
 
   template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::rgba8_u&)
   {
-    // TODO
+    QQmlProperty(item.item(), "from").write(0);
+    QQmlProperty(item.item(), "to").write(255);
+
+    QQmlProperty(item.item(), "slider.value").write(0); //TODO
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(qreal)), &item,
+        SLOT(on_floatValueChanged(qreal)));
   }
+
   template <typename D>
   void operator()(std::array<float, 4> c, const D&, const ossia::argb8_u&)
   {
-    // TODO
+    QQmlProperty(item.item(), "from").write(0);
+    QQmlProperty(item.item(), "to").write(255);
+
+    QQmlProperty(item.item(), "slider.value").write(0); //TODO
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(qreal)), &item,
+        SLOT(on_floatValueChanged(qreal)));
   }
-  template <typename D>
-  void operator()(std::array<float, 4> c, const D&, const ossia::rgba_u&)
-  {
-    // TODO
-  }
-  template <typename D>
-  void operator()(std::array<float, 4> c, const D&, const ossia::argb_u&)
-  {
-    // TODO
-  }
-  template <typename D>
-  void operator()(std::array<float, 3> c, const D&, const ossia::hsv_u&)
-  {
-    // TODO
-  }
-  template <typename D>
-  void operator()(std::array<float, 3> c, const D&, const ossia::rgb_u&)
-  {
-    // TODO
-  }
-  template <typename D>
-  void operator()(std::array<float, 4> c, const D&, const ossia::bgr_u&)
-  {
-    // TODO
-  }
+
   template <typename D, typename U>
   void operator()(const std::vector<ossia::value>& c, const D&, const U&)
   {
-    // TODO
+    QQmlProperty(item.item(), "from").write(0.);
+    QQmlProperty(item.item(), "to").write(1.);
+
+    QQmlProperty(item.item(), "slider.value").write(0.);
+
+    item.m_connection = QObject::connect(
+        item.item(), SIGNAL(valueChange(qreal)), &item,
+        SLOT(on_floatValueChanged(qreal)));
   }
 };
 
@@ -168,8 +174,10 @@ struct SetCheckboxAddress
   void operator()(State::impulse)
   {
     // Do nothing
+    /*
     item.m_connection = QObject::connect(
         item.item(), SIGNAL(toggled()), &item, SLOT(on_impulse()));
+        */
   }
   void operator()(bool)
   {
@@ -192,28 +200,9 @@ struct SetCheckboxAddress
         SLOT(on_boolValueChanged(bool)));
   }
 
-  void operator()(char c)
+  template<typename Arg>
+  void operator()(const Arg& c)
   {
-    item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(bool)), &item,
-        SLOT(on_boolValueChanged(bool)));
-  }
-  void operator()(const std::string& s)
-  {
-    item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(bool)), &item,
-        SLOT(on_boolValueChanged(bool)));
-  }
-
-  template <std::size_t N>
-  void operator()(std::array<float, N> c)
-  {
-    // TODO
-  }
-
-  void operator()(const std::vector<ossia::value>& c)
-  {
-    // TODO
   }
 };
 

@@ -32,8 +32,6 @@ public:
   {
     return m_item;
   }
-  virtual void setAddress(const Device::FullAddressSettings&);
-  void setValue(const State::Message& m);
 
   void enableListening(const Device::FullAddressSettings&);
   void disableListening(const Device::FullAddressSettings&);
@@ -43,17 +41,15 @@ public:
 Q_SIGNALS:
   void removeMe();
 
-private Q_SLOTS:
-  void setAddress(QString);
+public Q_SLOTS:
+    void setAddress(QString);
+    void setAddress(const Device::FullAddressSettings&);
 
-    void on_impulse();
-    void on_boolValueChanged(bool);
-    void on_intValueChanged(qreal);
-    void on_floatValueChanged(qreal);
-    void on_stringValueChanged(QString);
-    void on_parsableValueChanged(QString);
 
-private:
+protected:
+  virtual void setAddressImpl(const Device::FullAddressSettings&) = 0;
+  virtual void setValue(const State::Message& m) = 0;
+
   void sendMessage(const State::Address& m, const ossia::value& v);
   Context& m_ctx;
 

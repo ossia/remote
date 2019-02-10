@@ -77,6 +77,17 @@ CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
       SLOT(on_addressCreated(QString, qreal, qreal)));
 }
 
+
+QQuickItem* CentralItemModel::create(WidgetKind c)
+{
+  // UGH
+  auto comp = m_ctx.widgets[(int)c]->component();
+  auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
+  QQmlProperty(obj, "parent")
+      .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
+  return obj;
+}
+
 void CentralItemModel::on_itemCreated(QString data, qreal x, qreal y)
 {
   auto it = std::find_if(
@@ -99,22 +110,13 @@ void CentralItemModel::on_itemCreated(QString data, qreal x, qreal y)
       QQmlProperty(obj, "x").write(x - obj->width() / 2.);
       QQmlProperty(obj, "y").write(y - obj->height() / 2.);
 
-      addItem(new GUIItem {m_ctx, widget.widgetKind(), obj});
+      addItem(widget.widgetFactory()(m_ctx, widget.widgetKind(), obj));
     }
     else
     {
       qDebug() << "Error: object " << data << "could not be created";
     }
   }
-}
-
-QQuickItem* CentralItemModel::create(WidgetKind c)
-{
-  auto comp = m_ctx.widgets[c]->component();
-  auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
-  QQmlProperty(obj, "parent")
-      .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
-  return obj;
 }
 
 void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
@@ -133,7 +135,7 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
 
         if (auto obj = create(comp_type))
         {
-          auto item = new GUIItem {m_ctx, comp_type, obj};
+          auto item = m_ctx.widgets[(int)comp_type]->widgetFactory()(m_ctx, comp_type, obj);
 
           item->setAddress(
               Device::FullAddressSettings::make<
@@ -165,5 +167,6 @@ void CentralItemModel::addItem(GUIItem* item)
 
 void CentralItemModel::removeItem(GUIItem* item)
 {
+  // TODO
 }
 }
