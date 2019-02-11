@@ -345,11 +345,11 @@ struct SetRGBAddress
   {
     c = ossia::rgba{ossia::rgba8{c}}.dataspace_value;
     QQmlProperty(item.item(), "slider.enableAplha").write(true);
-    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+    // QQmlProperty(item.item(), "slider.value").write(QColor() << c[0] << c[1] << c[2] << c[3]);
 
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(QVariantList)), &item,
-        SLOT(on_rgba8Changed(QVariantList)));
+        item.item(), SIGNAL(valueChange(QColor)), &item,
+        SLOT(on_rgba8Changed(QColor)));
   }
 
   template <typename D>
@@ -357,11 +357,11 @@ struct SetRGBAddress
   {
     c = ossia::rgba{ossia::argb8{c}}.dataspace_value;
     QQmlProperty(item.item(), "slider.enableAplha").write(true);
-    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+    // QQmlProperty(item.item(), "slider.value").write(QColor() << c[0] << c[1] << c[2] << c[3]);
 
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(QVariantList)), &item,
-        SLOT(on_argb8Changed(QVariantList)));
+        item.item(), SIGNAL(valueChange(QColor)), &item,
+        SLOT(on_argb8Changed(QColor)));
   }
 
 
@@ -369,11 +369,11 @@ struct SetRGBAddress
   void operator()(std::array<float, 4> c, const D&, const ossia::rgba_u&)
   {
     QQmlProperty(item.item(), "slider.enableAplha").write(true);
-    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+    // QQmlProperty(item.item(), "slider.value").write(QColor() << c[0] << c[1] << c[2] << c[3]);
 
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(QVariantList)), &item,
-        SLOT(on_rgbaChanged(QVariantList)));
+        item.item(), SIGNAL(valueChange(QColor)), &item,
+        SLOT(on_rgbaChanged(QColor)));
   }
 
   template <typename D>
@@ -381,22 +381,22 @@ struct SetRGBAddress
   {
     c = ossia::rgba{ossia::argb{c}}.dataspace_value;
     QQmlProperty(item.item(), "slider.enableAplha").write(true);
-    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2] << c[3]);
+    // QQmlProperty(item.item(), "slider.value").write(QColor() << c[0] << c[1] << c[2] << c[3]);
 
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(QVariantList)), &item,
-        SLOT(on_argbChanged(QVariantList)));
+        item.item(), SIGNAL(valueChange(QColor)), &item,
+        SLOT(on_argbChanged(QColor)));
   }
 
   template <typename D>
   void operator()(std::array<float, 3> c, const D&, const ossia::rgb_u&)
   {
     QQmlProperty(item.item(), "slider.enableAplha").write(true);
-    QQmlProperty(item.item(), "slider.value").write(QVariantList() << c[0] << c[1] << c[2]);
+    // QQmlProperty(item.item(), "slider.value").write(QColor() << c[0] << c[1] << c[2]);
 
     item.m_connection = QObject::connect(
-        item.item(), SIGNAL(valueChange(QVariantList)), &item,
-        SLOT(on_rgbChanged(QVariantList)));
+        item.item(), SIGNAL(valueChange(QColor)), &item,
+        SLOT(on_rgbChanged(QColor)));
   }
 
   template<typename... Arg>

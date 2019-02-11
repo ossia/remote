@@ -14,6 +14,7 @@
 #include <Models/NodeModel.hpp>
 #include <Models/WidgetAddressSetup.hpp>
 #include <WebSocketClient.hpp>
+
 namespace RemoteUI
 {
 // Type to widget
@@ -78,6 +79,58 @@ struct AddressItemFactory
   {
     return nullptr; //createItem("LineEdit");
   }
+
+  template <typename D>
+  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::rgba_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::rgba8_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::argb_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::argb8_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(std::array<float, 3> arr , const D&, const ossia::rgb_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+
+  template <typename D>
+  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::rgba_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::rgba8_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::argb_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::argb8_u&) const
+  {
+    return createItem("RGBSlider");
+  }
+  template <typename D>
+  GUIItem* operator()(const std::vector<ossia::value>&, const D&, const ossia::rgb_u&) const
+  {
+    return createItem("RGBSlider");
+  }
   template <typename D, typename U>
   GUIItem* operator()(const std::vector<ossia::value>& c, const D&, const U&) const
   {
@@ -136,9 +189,9 @@ void CentralItemModel::on_itemCreated(QString widgetName, qreal x, qreal y)
 
 void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
 {
-  if (auto address = State::Address::fromString(data))
+  if (auto address = State::parseAddressAccessor(data))
   {
-    auto n = Device::try_getNodeFromAddress(m_ctx.nodes.rootNode(), *address);
+    auto n = Device::try_getNodeFromAddress(m_ctx.nodes.rootNode(), address->address);
     if (n)
     {
       auto as = n->target<Device::AddressSettings>();

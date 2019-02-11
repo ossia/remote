@@ -22,6 +22,9 @@ Item {
             border.color: "#302d2e"
             border.width: 1
 
+            Image {
+                id: img
+            }
 
             MouseArea {
                 id: mouseArea
@@ -71,11 +74,9 @@ Item {
                      color: "#161516"
                 }
             }
-            Image {
-                source: image
-            }
 
             Component.onCompleted: {
+                img.source = image
                 itemFiller.createObject(delegateLayout, {});
             }
 

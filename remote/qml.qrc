@@ -27,5 +27,7 @@
         <file>resources/drag_switch.png</file>
         <file>resources/drag_hslider.png</file>
         <file>resources/drag_vslider.png</file>
+        <file>qml/widgets/RGBSlider.qml</file>
+        <file>qml/widgets/RGBSliderForm.ui.qml</file>
     </qresource>
 </RCC>

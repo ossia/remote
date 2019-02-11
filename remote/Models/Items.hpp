@@ -203,56 +203,55 @@ public:
   using GUIItem::GUIItem;
 
 public Q_SLOTS:
-  void on_rgba8Changed(const QVariantList& lst)
+  void on_rgba8Changed(QColor lst)
   {
     std::array<float, 4> val{
-      lst[0].toFloat()
-          , lst[1].toFloat()
-          , lst[2].toFloat()
-          , lst[3].toFloat()
+            (float)lst.red()
+          , (float)lst.green()
+          , (float)lst.blue()
+          , (float)lst.alpha()
     };
-    val = ossia::rgba8{ossia::rgba{val}}.dataspace_value;
+
     sendMessage(m_addr.address, val);
   }
-  void on_argb8Changed(const QVariantList& lst)
+  void on_argb8Changed(QColor lst)
   {
     std::array<float, 4> val{
-      lst[0].toFloat()
-          , lst[1].toFloat()
-          , lst[2].toFloat()
-          , lst[3].toFloat()
+      (float)lst.alpha()
+    , (float)lst.red()
+    , (float)lst.green()
+    , (float)lst.blue()
     };
-    val = ossia::argb8{ossia::rgba{val}}.dataspace_value;
+
     sendMessage(m_addr.address, val);
   }
-  void on_rgbaChanged(const QVariantList& lst)
+  void on_rgbaChanged(QColor lst)
   {
     std::array<float, 4> val{
-      lst[0].toFloat()
-          , lst[1].toFloat()
-          , lst[2].toFloat()
-          , lst[3].toFloat()
+            (float)lst.redF()
+          , (float)lst.greenF()
+          , (float)lst.blueF()
+          , (float)lst.alphaF()
     };
     sendMessage(m_addr.address, val);
   }
-  void on_argbChanged(const QVariantList& lst)
+  void on_argbChanged(QColor lst)
   {
     std::array<float, 4> val{
-      lst[0].toFloat()
-          , lst[1].toFloat()
-          , lst[2].toFloat()
-          , lst[3].toFloat()
+            (float)lst.alphaF()
+          , (float)lst.redF()
+          , (float)lst.greenF()
+          , (float)lst.blueF()
     };
-    val = ossia::argb{ossia::rgba{val}}.dataspace_value;
     sendMessage(m_addr.address, val);
   }
 
-  void on_rgbChanged(const QVariantList& lst)
+  void on_rgbChanged(QColor lst)
   {
     std::array<float, 3> val{
-      lst[0].toFloat()
-          , lst[1].toFloat()
-          , lst[2].toFloat()
+      (float)lst.redF()
+    , (float)lst.greenF()
+    , (float)lst.blueF()
     };
     sendMessage(m_addr.address, val);
   }

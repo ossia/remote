@@ -60,6 +60,12 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl("qrc:///resources/switch.png"),
       factory<PushButton>(),
       engine};
+  componentList["RGBSlider"] = new RemoteUI::WidgetListData {
+      "RGBSlider", "RGB", "",
+      QUrl("qrc:///qml/widgets/RGBSlider.qml"),
+      QUrl(),
+      factory<RGBSlider>(),
+      engine};
 
   // QML absolutely wants a QList<QObject*>
   for (auto l : componentList)
