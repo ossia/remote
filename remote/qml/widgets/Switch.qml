@@ -4,11 +4,16 @@ import QtQuick.Layouts 1.3
 import com.github.jcelerier.CreativeControls 1.0
 
 Rectangle {
+    id: widg
+
     property alias dynamicSwitch: dynamicSwitch
     property alias label: label
     property alias color: widg.color
+    property alias dropper: dropper
 
-    id: widg
+    signal valueChange(bool val)
+    signal addressChanged(string addr)
+
     width: 100
     height: 50
     color: "#00000000"
@@ -26,6 +31,14 @@ Rectangle {
             //checked: false
             implicitWidth: 80
             implicitHeight: 40
+            onStateChanged: {
+                valueChange(dynamicSwitch.state === "ON")
+            }
         }
+    }
+
+    AddressDrop {
+        id: dropper
+        item: widg
     }
 }

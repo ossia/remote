@@ -4,9 +4,17 @@ import QtQuick.Layouts 1.3
 import com.github.jcelerier.CreativeControls 1.0
 
 Rectangle {
+    id: widg
+
     property alias slider: slider
     property alias label: label
-    id: widg
+    property alias dropper: dropper
+    property real from: 0.
+    property real to: 1.
+
+    signal valueChange(real val)
+    signal addressChanged(string addr)
+
     width: 162
     height: 20
     color: "#00000000"
@@ -24,6 +32,17 @@ Rectangle {
             width: 162
             height: 40
             //orientation: Qt.Horizontal
+            onValueChanged: {
+                valueChange(slider.value)
+            }
+            mapFunc: function (val) {
+                return from + (to - from) * val
+            }
         }
+    }
+
+    AddressDrop {
+        id: dropper
+        item: widg
     }
 }

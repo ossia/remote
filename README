@@ -1,0 +1,7 @@
+# A remote interface for OSCQuery devices
+
+
+# Important notes
+
+Only Zeroconf is supported : on linux it has to be configured.
+https://wiki.archlinux.org/index.php/avahi#Hostname_resolution

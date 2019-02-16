@@ -3,30 +3,27 @@ import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import com.github.jcelerier.CreativeControls 1.0
 
-Rectangle
-{
-    property alias button: button
+Rectangle {
+    property alias slider: slider
     property alias label: label
     id: widg
-    width: 40
-    height: 50
+    width: 162
+    height: 150
     color: "#00000000"
     Drag.dragType: Drag.Internal
 
     ColumnLayout {
-        AddressLabel
-        {
+        AddressLabel {
             id: label
             Layout.preferredHeight: 18
-            Layout.preferredWidth: 212
+            Layout.preferredWidth: 162
         }
-        Switch
-        {
-            id: button
-            //text: qsTr("Button")
-            implicitWidth: 40
-            implicitHeight: 40
+
+        RGBSlider {
+            id: slider
+            width: 162
+            height: 126
+            //orientation: Qt.Horizontal
         }
     }
-
 }

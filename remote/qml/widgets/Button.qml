@@ -4,16 +4,17 @@ import QtQuick.Layouts 1.3
 import com.github.jcelerier.CreativeControls 1.0
 
 Rectangle {
-    property alias slider: slider
+    id: widg
+
+    property alias button: button
     property alias label: label
     property alias dropper: dropper
 
-    signal valueChange(color val)
     signal addressChanged(string addr)
+    signal clicked
 
-    id: widg
-    width: 162
-    height: 150
+    width: 40
+    height: 50
     color: "#00000000"
     Drag.dragType: Drag.Internal
 
@@ -21,17 +22,13 @@ Rectangle {
         AddressLabel {
             id: label
             Layout.preferredHeight: 18
-            Layout.preferredWidth: 162
+            Layout.preferredWidth: 212
         }
-
-        RGBSlider {
-            id: slider
-            width: 162
-            height: 126
-            //orientation: Qt.Horizontal
-            onColorChanged: {
-                valueChange(color)
-            }
+        Switch {
+            id: button
+            //text: qsTr("Button")
+            implicitWidth: 40
+            implicitHeight: 40
         }
     }
 
@@ -39,4 +36,6 @@ Rectangle {
         id: dropper
         item: widg
     }
+
+    Component.onCompleted: button.pressed.connect(clicked)
 }

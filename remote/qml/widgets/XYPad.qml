@@ -1,12 +1,17 @@
 import QtQuick 2.11
+import QtQuick.Controls 2.4
 
-DynamicLineEditForm
+RGBSliderForm
 {
+    id: widg
+
+    signal valueChange(color val)
     signal addressChanged(string addr)
 
-    signal textChange(string txt)
-    textField.onEditingFinished: { textChange(textField.text); }
-    id: widg
+    slider.onColorChanged: {
+        valueChange(color);
+    }
+
     property alias dropper: dropper
     AddressDrop
     {

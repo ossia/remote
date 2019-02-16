@@ -8,26 +8,19 @@
         <file>qml/NodeTree.qml</file>
         <file>qml/CentralAreaForm.ui.qml</file>
         <file>qml/WidgetListForm.ui.qml</file>
-        <file>qml/widgets/DynamicButton.qml</file>
-        <file>qml/widgets/DynamicButtonForm.ui.qml</file>
-        <file>qml/widgets/DynamicHSlider.qml</file>
-        <file>qml/widgets/DynamicHSliderForm.ui.qml</file>
-        <file>qml/widgets/DynamicLineEdit.qml</file>
-        <file>qml/widgets/DynamicLineEditForm.ui.qml</file>
-        <file>qml/widgets/DynamicSwitch.qml</file>
-        <file>qml/widgets/DynamicSwitchForm.ui.qml</file>
-        <file>qml/widgets/DynamicVSlider.qml</file>
-        <file>qml/widgets/DynamicVSliderForm.ui.qml</file>
+        <file>qml/widgets/Button.qml</file>
+        <file>qml/widgets/HSlider.qml</file>
+        <file>qml/widgets/LineEdit.qml</file>
+        <file>qml/widgets/Switch.qml</file>
+        <file>qml/widgets/VSlider.qml</file>
         <file>qml/widgets/AddressDrop.qml</file>
         <file>qml/widgets/AddressLabel.qml</file>
-        <file>qml/widgets/DynamicLabel.qml</file>
-        <file>qml/widgets/DynamicLabelForm.ui.qml</file>
+        <file>qml/widgets/Label.qml</file>
         <file>resources/slider.png</file>
         <file>resources/switch.png</file>
         <file>resources/drag_switch.png</file>
         <file>resources/drag_hslider.png</file>
         <file>resources/drag_vslider.png</file>
         <file>qml/widgets/RGBSlider.qml</file>
-        <file>qml/widgets/RGBSliderForm.ui.qml</file>
     </qresource>
 </RCC>

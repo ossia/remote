@@ -21,42 +21,42 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
 {
   componentList["HSlider"] = new RemoteUI::WidgetListData {
       "HSlider", "Horizontal Slider", "drag_hslider.png",
-      QUrl("qrc:///qml/widgets/DynamicHSlider.qml"),
+      QUrl("qrc:///qml/widgets/HSlider.qml"),
       QUrl("qrc:///resources/slider.png"),
       factory<Slider>(),
       engine};
 
   componentList["VSlider"] = new RemoteUI::WidgetListData {
       "VSlider", "Vertical Slider", "drag_vslider.png",
-      QUrl("qrc:///qml/widgets/DynamicVSlider.qml"),
+      QUrl("qrc:///qml/widgets/VSlider.qml"),
       QUrl("qrc:///resources/slider.png"),
       factory<Slider>(),
       engine};
 
   componentList["Switch"] = new RemoteUI::WidgetListData {
       "Switch", "CheckBox", "drag_switch.png",
-      QUrl("qrc:///qml/widgets/DynamicSwitch.qml"),
+      QUrl("qrc:///qml/widgets/Switch.qml"),
       QUrl("qrc:///resources/switch.png"),
       factory<CheckBox>(),
       engine};
 
   componentList["LineEdit"] = new RemoteUI::WidgetListData {
       "LineEdit", "LineEdit", "",
-      QUrl("qrc:///qml/widgets/DynamicLineEdit.qml"),
+      QUrl("qrc:///qml/widgets/LineEdit.qml"),
       QUrl(),
       factory<LineEdit>(),
       engine};
 
   componentList["Label"] = new RemoteUI::WidgetListData {
       "Label", "Label", "",
-      QUrl("qrc:///qml/widgets/DynamicLabel.qml"),
+      QUrl("qrc:///qml/widgets/Label.qml"),
       QUrl(),
       factory<Label>(),
       engine};
 
   componentList["Button"] = new RemoteUI::WidgetListData {
       "Button", "Button", "drag_switch.png",
-      QUrl("qrc:///qml/widgets/DynamicButton.qml"),
+      QUrl("qrc:///qml/widgets/Button.qml"),
       QUrl("qrc:///resources/switch.png"),
       factory<PushButton>(),
       engine};

@@ -4,16 +4,20 @@ import QtQuick.Layouts 1.3
 import com.github.jcelerier.CreativeControls 1.0
 
 Rectangle {
+    id: widg
+
     property alias slider: slider
     property alias label: label
     property alias dropper: dropper
 
-    signal valueChange(color val)
+    property real from: 0.
+    property real to: 1.
+
+    signal valueChange(real val)
     signal addressChanged(string addr)
 
-    id: widg
-    width: 162
-    height: 150
+    width: 154
+    height: 231
     color: "#00000000"
     Drag.dragType: Drag.Internal
 
@@ -24,13 +28,18 @@ Rectangle {
             Layout.preferredWidth: 162
         }
 
-        RGBSlider {
+        VSlider {
             id: slider
-            width: 162
-            height: 126
+            x: 86
+            y: 24
+            width: 40
+            height: 162
             //orientation: Qt.Horizontal
-            onColorChanged: {
-                valueChange(color)
+            onValueChanged: {
+                valueChange(slider.value)
+            }
+            mapFunc: function (val) {
+                return from + (to - from) * val
             }
         }
     }

@@ -2,13 +2,18 @@ import QtQuick 2.11
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
-Rectangle
-{
+
+Rectangle {
+    id: widg
+
     property alias textField: field
     property alias label: label
     property alias color: widg.color
+    property alias dropper: dropper
 
-    id: widg
+    signal addressChanged(string addr)
+    signal textChange(string txt)
+
     width: 212
     height: 86
     color: "#00000000"
@@ -16,8 +21,7 @@ Rectangle
     Drag.dragType: Drag.Internal
 
     ColumnLayout {
-        AddressLabel
-        {
+        AddressLabel {
             id: label
             Layout.preferredHeight: 18
             Layout.preferredWidth: 212
@@ -38,8 +42,14 @@ Rectangle
                     color: "#b4c889"
                 }
             }
+            onEditingFinished: {
+                textChange(textField.text)
+            }
         }
-
     }
 
+    AddressDrop {
+        id: dropper
+        item: widg
+    }
 }
