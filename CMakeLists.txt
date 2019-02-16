@@ -52,6 +52,7 @@ set(OSSIA_QML_SCORE OFF CACHE "" INTERNAL)
 add_subdirectory(score/API)
 
 set(SRCS
+"${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/CreateItemFromAddress.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/CentralItemModel.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/NodeModel.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/WidgetListModel.hpp"

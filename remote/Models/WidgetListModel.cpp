@@ -66,6 +66,24 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl(),
       factory<RGBSlider>(),
       engine};
+  componentList["HSVSlider"] = new RemoteUI::WidgetListData {
+      "HSVSlider", "HSV", "",
+      QUrl("qrc:///qml/widgets/HSVSlider.qml"),
+      QUrl(),
+      factory<HSVSlider>(),
+      engine};
+  componentList["XYPad"] = new RemoteUI::WidgetListData {
+      "XYPad", "X-Y", "",
+      QUrl("qrc:///qml/widgets/XYPad.qml"),
+      QUrl(),
+      factory<XYPad>(),
+      engine};
+  componentList["Joystick"] = new RemoteUI::WidgetListData {
+      "Joystick", "Joystick", "",
+      QUrl("qrc:///qml/widgets/Joystick.qml"),
+      QUrl(),
+      factory<Joystick>(),
+      engine};
 
   // QML absolutely wants a QList<QObject*>
   for (auto l : componentList)

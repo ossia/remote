@@ -23,6 +23,9 @@ class GUIItem : public QObject
   friend struct SetCheckboxAddress;
   friend struct SetLineEditAddress;
   friend struct SetRGBAddress;
+  friend struct SetHSVAddress;
+  friend struct SetXYAddress;
+  friend struct SetJoystickAddress;
 
 public:
   GUIItem(Context& ctx, QQuickItem* it);

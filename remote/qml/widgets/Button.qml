@@ -1,7 +1,7 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import com.github.jcelerier.CreativeControls 1.0
+import com.github.jcelerier.CreativeControls 1.0 as CC
 
 Rectangle {
     id: widg
@@ -24,9 +24,9 @@ Rectangle {
             Layout.preferredHeight: 18
             Layout.preferredWidth: 212
         }
-        Switch {
+
+        CC.Switch {
             id: button
-            //text: qsTr("Button")
             implicitWidth: 40
             implicitHeight: 40
         }

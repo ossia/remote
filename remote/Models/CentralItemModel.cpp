@@ -1,6 +1,7 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check
 // it. PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "CentralItemModel.hpp"
+#include "CreateItemFromAddress.hpp"
 
 #include "WidgetListModel.hpp"
 #include "Items.hpp"
@@ -12,131 +13,10 @@
 #include <QQmlProperty>
 
 #include <Models/NodeModel.hpp>
-#include <Models/WidgetAddressSetup.hpp>
 #include <WebSocketClient.hpp>
 
 namespace RemoteUI
 {
-// Type to widget
-struct AddressItemFactory
-{
-  using return_type = GUIItem*;
-  Context& m_ctx;
-
-
-  GUIItem* createItem(const QString& name) const
-  {
-    auto w = m_ctx.widgets[name];
-    auto comp = w->component();
-    auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
-    QQmlProperty(obj, "parent")
-        .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
-    return w->widgetFactory()(m_ctx, obj);
-  }
-
-  template <typename T, typename D, typename U>
-  GUIItem* operator()(const T&, const D&, const U&) const
-  {
-    std::cerr << "TODO: " << typeid(T).name() << " ... " << typeid(D).name() << " ... " << typeid(U).name() << std::endl;
-    return nullptr;
-  }
-
-  template <typename D, typename U>
-  GUIItem* operator()(float, const D&, const U&) const
-  {
-    return createItem("HSlider");
-  }
-
-  template <typename D, typename U>
-  GUIItem* operator()(int, const D&, const U&) const
-  {
-    return createItem("HSlider");
-  }
-
-  template <typename D, typename U>
-  GUIItem* operator()(ossia::impulse, const D&, const U&) const
-  {
-    return createItem("Button");
-  }
-
-  template <typename D, typename U>
-  GUIItem* operator()(bool, const D&, const U&) const
-  {
-    return createItem("Switch");
-  }
-  template <typename D, typename U>
-  GUIItem* operator()(const std::string& v, const D&, const U&) const
-  {
-    return createItem("LineEdit");
-  }
-  template <typename D, typename U>
-  GUIItem* operator()(char , const D&, const U&) const
-  {
-    return createItem("LineEdit");
-  }
-  template <std::size_t N, typename D, typename U>
-  GUIItem* operator()(std::array<float, N> arr , const D&, const U&) const
-  {
-    return nullptr; //createItem("LineEdit");
-  }
-
-  template <typename D>
-  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::rgba_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::rgba8_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::argb_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(std::array<float, 4> arr , const D&, const ossia::argb8_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(std::array<float, 3> arr , const D&, const ossia::rgb_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-
-  template <typename D>
-  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::rgba_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::rgba8_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::argb_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(const std::vector<ossia::value>& arr , const D&, const ossia::argb8_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D>
-  GUIItem* operator()(const std::vector<ossia::value>&, const D&, const ossia::rgb_u&) const
-  {
-    return createItem("RGBSlider");
-  }
-  template <typename D, typename U>
-  GUIItem* operator()(const std::vector<ossia::value>& c, const D&, const U&) const
-  {
-    return nullptr; //createItem("LineEdit");
-  }
-};
 
 CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
     : QObject(parent), m_ctx {ctx}

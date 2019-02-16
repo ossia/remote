@@ -22,5 +22,8 @@
         <file>resources/drag_hslider.png</file>
         <file>resources/drag_vslider.png</file>
         <file>qml/widgets/RGBSlider.qml</file>
+        <file>qml/widgets/XYPad.qml</file>
+        <file>qml/widgets/HSVSlider.qml</file>
+        <file>qml/widgets/Joystick.qml</file>
     </qresource>
 </RCC>
