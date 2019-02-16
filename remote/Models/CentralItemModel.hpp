@@ -21,8 +21,12 @@ public:
   explicit CentralItemModel(Context&, QObject* parent = 0);
 
 public Q_SLOTS:
+  void load(QUrl path);
+  void save(QUrl path);
+
   void on_itemCreated(QString data, qreal x, qreal y);
   void on_addressCreated(QString data, qreal x, qreal y);
+  void loadItem(QString type, QString address, qreal x, qreal y);
 
   void addItem(GUIItem* item);
   void removeItem(GUIItem* item);

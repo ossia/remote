@@ -17,8 +17,8 @@ namespace RemoteUI
 {
 
 
-GUIItem::GUIItem(Context& ctx, QQuickItem* it)
-    : m_ctx {ctx}, m_item {it}
+GUIItem::GUIItem(Context& ctx, RemoteUI::WidgetListData* factory, QQuickItem* it)
+    : m_ctx {ctx}, m_factory{factory}, m_item {it}
 {
   connect(
       m_item, SIGNAL(addressChanged(QString)), this,
@@ -46,6 +46,16 @@ qreal GUIItem::x() const
 qreal GUIItem::y() const
 {
   return QQmlProperty(m_item, "y").read().toReal();
+}
+
+QString GUIItem::address() const
+{
+  return m_addr.address.toString();
+}
+
+QString GUIItem::type() const
+{
+  return m_factory->name();
 }
 
 void GUIItem::setAddress(QString data)

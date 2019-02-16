@@ -2,10 +2,40 @@ import QtQuick 2.11
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4
 
+import QtQuick.Dialogs 1.3
+
 CentralAreaForm {
     Layout.fillWidth: true
     Layout.fillHeight: true
 
+    FileDialog {
+        id: fileDialog
+        visible: false
+        title: "Please choose a file"
+        folder: shortcuts.home
+        selectMultiple: false
+        onAccepted: {
+            if(selectExisting)
+                centralItem.load(fileDialog.fileUrls[0])
+            else
+                centralItem.save(fileDialog.fileUrls[0])
+        }
+    }
+    Shortcut {
+        sequence: StandardKey.Open
+        onActivated: {
+            fileDialog.selectExisting = true
+            fileDialog.visible = true
+        }
+    }
+
+    Shortcut {
+        sequence: StandardKey.Save
+        onActivated: {
+            fileDialog.selectExisting = false
+            fileDialog.visible = true
+        }
+    }
 
     ScrollView
     {
@@ -20,6 +50,8 @@ CentralAreaForm {
             id: centralItem
             objectName: "centralItem"
 
+            signal load(url u);
+            signal save(url u);
             signal createObject(string objname, real x, real y)
             signal createAddress(string objname, real x, real y)
 

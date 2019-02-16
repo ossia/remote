@@ -9,7 +9,8 @@
 namespace RemoteUI
 {
 class GUIItem;
-using ItemFactory = std::function<GUIItem*(Context&, QQuickItem* )>;
+class WidgetListData;
+using ItemFactory = std::function<GUIItem*(Context&, WidgetListData*, QQuickItem* )>;
 /** An instance of this class represents a type of widget that can be
  * instantiated.
  */

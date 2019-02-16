@@ -20,7 +20,7 @@ struct AddressItemFactory
     auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
     QQmlProperty(obj, "parent")
         .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
-    return w->widgetFactory()(m_ctx, obj);
+    return w->widgetFactory()(m_ctx, w, obj);
   }
 
   template <typename T, typename D, typename U>

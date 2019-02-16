@@ -15,7 +15,7 @@ struct FullAddressSettings;
 namespace RemoteUI
 {
 struct Context;
-
+class WidgetListData;
 class GUIItem : public QObject
 {
   Q_OBJECT
@@ -28,7 +28,7 @@ class GUIItem : public QObject
   friend struct SetJoystickAddress;
 
 public:
-  GUIItem(Context& ctx, QQuickItem* it);
+  GUIItem(Context& ctx, RemoteUI::WidgetListData* factory, QQuickItem* it);
   ~GUIItem();
 
   QQuickItem* item() const
@@ -40,13 +40,15 @@ public:
   void disableListening(const Device::FullAddressSettings&);
   qreal x() const;
   qreal y() const;
+  QString address() const;
+  QString type() const;
 
 Q_SIGNALS:
   void removeMe();
 
 public Q_SLOTS:
-    void setAddress(QString);
-    void setAddress(const Device::FullAddressSettings&);
+  void setAddress(QString);
+  void setAddress(const Device::FullAddressSettings&);
 
 
 protected:
@@ -56,7 +58,9 @@ protected:
   void sendMessage(const State::Address& m, const ossia::value& v);
   Context& m_ctx;
 
-  QQuickItem* m_item;
+  RemoteUI::WidgetListData* m_factory{};
+  QQuickItem* m_item{};
+  QString m_addrText;
   Device::FullAddressSettings m_addr;
   QMetaObject::Connection m_connection;
 };
