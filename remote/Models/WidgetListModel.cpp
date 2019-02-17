@@ -22,7 +22,7 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
   componentList["HSlider"] = new RemoteUI::WidgetListData {
       "HSlider", "Horizontal Slider", "drag_hslider.png",
       QUrl("qrc:///qml/widgets/HSlider.qml"),
-      QUrl("qrc:///resources/slider.png"),
+      QUrl("qrc:///resources/hslider.png"),
       factory<Slider>(),
       engine};
 
@@ -36,7 +36,7 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
   componentList["Switch"] = new RemoteUI::WidgetListData {
       "Switch", "CheckBox", "drag_switch.png",
       QUrl("qrc:///qml/widgets/Switch.qml"),
-      QUrl("qrc:///resources/switch.png"),
+      QUrl("qrc:///resources/toggleSwitch16.png"),
       factory<CheckBox>(),
       engine};
 
@@ -63,31 +63,31 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
   componentList["RGBSlider"] = new RemoteUI::WidgetListData {
       "RGBSlider", "RGB", "",
       QUrl("qrc:///qml/widgets/RGBSlider.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/rgbSlider16.png"),
       factory<RGBSlider>(),
       engine};
   componentList["HSVSlider"] = new RemoteUI::WidgetListData {
       "HSVSlider", "HSV", "",
       QUrl("qrc:///qml/widgets/HSVSlider.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/hsvSlider16.png"),
       factory<HSVSlider>(),
       engine};
   componentList["XYPad"] = new RemoteUI::WidgetListData {
       "XYPad", "X-Y", "",
       QUrl("qrc:///qml/widgets/XYPad.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/pad16.png"),
       factory<XYPad>(),
       engine};
   componentList["Joystick"] = new RemoteUI::WidgetListData {
       "Joystick", "Joystick", "",
       QUrl("qrc:///qml/widgets/Joystick.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/joystick16.png"),
       factory<Joystick>(),
       engine};
   componentList["Container"] = new RemoteUI::WidgetListData {
       "Container", "Container", "",
       QUrl("qrc:///qml/widgets/Container.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/container16.png"),
       factory<Container>(),
       engine};
 

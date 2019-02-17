@@ -25,5 +25,22 @@
         <file>qml/widgets/HSVSlider.qml</file>
         <file>qml/widgets/Joystick.qml</file>
         <file>qml/widgets/Container.qml</file>
+        <file>resources/angleSlider16.png</file>
+        <file>resources/container16.png</file>
+        <file>resources/donutSlider16.png</file>
+        <file>resources/graph16.png</file>
+        <file>resources/hsvSlider16.png</file>
+        <file>resources/joystick16.png</file>
+        <file>resources/keyboard16.png</file>
+        <file>resources/leds16.png</file>
+        <file>resources/matri16.png</file>
+        <file>resources/multislider16.png</file>
+        <file>resources/pad16.png</file>
+        <file>resources/rgbSlider16.png</file>
+        <file>resources/scope16.png</file>
+        <file>resources/slider16.png</file>
+        <file>resources/switch16.png</file>
+        <file>resources/toggleSwitch16.png</file>
+        <file>resources/hslider.png</file>
     </qresource>
 </RCC>
