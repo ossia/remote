@@ -6,6 +6,7 @@
 #include <Device/Node/DeviceNode.hpp>
 #include <State/Expression.hpp>
 #include <State/ValueParser.hpp>
+#include <score/serialization/JSONValueVisitor.hpp>
 
 #include <Models/NodeModel.hpp>
 #include <RemoteApplication.hpp>
@@ -46,6 +47,7 @@ QJsonObject GUIItem::save() const noexcept
   obj["y"] = y();
   obj["settings"] = toJsonObject(addressSettings());
   obj["type"] = type();
+  obj["parent"] = toJsonValue(parentId());
   return obj;
 }
 

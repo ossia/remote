@@ -15,9 +15,30 @@
 #include <QJsonDocument>
 
 #include <Models/NodeModel.hpp>
+#include <score/tools/IdentifierGeneration.hpp>
 
 namespace RemoteUI
 {
+template <typename Container>
+auto makeId(const Container& v) -> int32_t
+{
+  using namespace std;
+  auto ids = make_dynarray(int32_t, std::size_t(v.size()));
+
+  transform(v.begin(), v.end(), ids.begin(), [](const auto& elt) {
+    return elt->id();
+  });
+
+  return score::id_generator::getNextId(ids);
+}
+
+static auto createContainer(Context& m_ctx)
+{
+  auto w = m_ctx.widgets["Container"];
+  auto comp = w->component();
+  auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
+  return std::pair{w, obj};
+}
 
 CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
     : QObject(parent), m_ctx {ctx}
@@ -75,6 +96,10 @@ void CentralItemModel::load(QUrl path)
   if(!txt.isObject())
     return;
 
+  auto pages = txt.object()["Pages"].toArray();
+  if(pages.empty())
+    return;
+  auto page = pages[0].toObject();
 
   for(auto item : m_guiItems)
     delete item;
@@ -83,41 +108,71 @@ void CentralItemModel::load(QUrl path)
     delete item;
   m_containers.clear();
 
-  const auto items = txt.object()["Items"].toArray();
-  for(const auto& item : items)
-  {
-    double x = item["x"].toDouble();
-    double y = item["y"].toDouble();
-    auto addr = fromJsonObject<Device::FullAddressSettings>(item["settings"]);
-    QString type = item["type"].toString();
 
-    loadItem(std::move(type), std::move(addr), x, y);
-  }
 
-  const auto containers = txt.object()["Containers"].toArray();
+  std::unordered_map<int32_t, std::tuple<ContainerItem*, QRectF>> container_objects;
+  const auto containers = page["Containers"].toArray();
   for(const auto& item : containers)
   {
     double x = item["x"].toDouble();
     double y = item["y"].toDouble();
+    double z = item["z"].toDouble();
+    double width = item["width"].toDouble();
+    double height = item["height"].toDouble();
 
-    loadItem("Container", {}, x, y);
+    int32_t id = item["id"].toInt();
+    auto parent = fromJsonValue<optional<int32_t>>(item["parent"]);
+
+    auto [w, obj] = createContainer(m_ctx);
+
+    auto object = new ContainerItem{m_ctx, w, obj};
+    object->setId(id);
+    object->setParentId(parent);
+    container_objects[id] = {new ContainerItem{m_ctx, w, obj}, QRectF{x, y, width, height}};
   }
+
+  for(const auto& [id, tpl] : container_objects)
+  {
+    const auto& [container, rect] = tpl;
+    if(auto parent = container->parentId())
+    {
+      setup(*container->item(), rect.x(), rect.y(), (QObject*)std::get<0>(container_objects[*parent])->item());
+    }
+    else
+    {
+      setup(*container->item(), rect.x(), rect.y(), (QObject*)m_ctx.centralItem);
+    }
+    QQmlProperty(container->item(), "width").write(rect.width());
+    QQmlProperty(container->item(), "height").write(rect.height());
+
+    addContainer(container);
+  }
+
+  const auto items = page["Items"].toArray();
+  for(const auto& item : items)
+  {
+    double x = item["x"].toDouble();
+    double y = item["y"].toDouble();
+    auto parent = fromJsonValue<optional<int32_t>>(item["parent"]);
+    auto addr = fromJsonObject<Device::FullAddressSettings>(item["settings"]);
+    QString type = item["type"].toString();
+
+    QObject* parentItem = m_ctx.centralItem;
+    if(parent)
+    {
+      parentItem = std::get<0>(container_objects[*parent])->item();
+    }
+
+    loadItem(std::move(type), std::move(addr), x, y, parent, parentItem);
+  }
+
 }
 
-template<typename T>
-static auto setup(T& obj, qreal x, qreal y, QObject* parent)
+void CentralItemModel::setup(QQuickItem& obj, qreal x, qreal y, QObject* parent)
 {
   QQmlProperty(&obj, "parent").write(QVariant::fromValue(parent));
   QQmlProperty(&obj, "x").write(x);
   QQmlProperty(&obj, "y").write(y);
-}
-
-static auto createContainer(Context& m_ctx)
-{
-  auto w = m_ctx.widgets["Container"];
-  auto comp = w->component();
-  auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
-  return std::pair{w, obj};
 }
 
 void CentralItemModel::on_itemCreated(QString type, qreal x, qreal y, QQuickItem* parent)
@@ -138,7 +193,9 @@ void CentralItemModel::on_itemCreated(QString type, qreal x, qreal y, QQuickItem
       }
       else
       {
-        addContainer(new ContainerItem{m_ctx, &factory, obj});
+        auto container = new ContainerItem{m_ctx, &factory, obj};
+        container->setId(makeId(m_containers));
+        addContainer(container);
         return;
       }
     }
@@ -179,43 +236,42 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y, QQuickI
         {
           auto [w, obj] = createContainer(m_ctx);
           setup(*obj, x - obj->width() / 2., y - obj->height() / 2., parent);
-          addContainer(new ContainerItem{m_ctx, w, obj});
+          auto container = new ContainerItem{m_ctx, w, obj};
+          container->setId(makeId(m_containers));
+          addContainer(container);
         }
       }
     }
   }
 }
 
-void CentralItemModel::loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y)
+void CentralItemModel::loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y, optional<int32_t> parent, QObject* parentItem)
 {
-  // We try to create a relevant component according to the type of the
-  // value.
-  if(type != "Container")
+  auto item = AddressItemFactory {m_ctx}.createItem(type);
+  if (item)
   {
-    auto item = AddressItemFactory {m_ctx}.createItem(type);
-    if (item)
-    {
-      item->setAddress(std::move(address));
+    item->setAddress(std::move(address));
+    item->setParentId(parent);
 
-      auto obj = item->item();
+    setup(*item->item(), x, y, parentItem);
 
-      setup(*obj, x, y, (QObject*)m_ctx.centralItem);
-
-      addItem(item);
-    }
-  }
-  else
-  {
-    auto [w, obj] = createContainer(m_ctx);
-    setup(*obj, x, y, (QObject*)m_ctx.centralItem);
-
-    addContainer(new ContainerItem{m_ctx, w, obj});
+    addItem(item);
   }
 }
 
 void CentralItemModel::addItem(GUIItem* item)
 {
   m_guiItems.push_back(item);
+
+  auto it = ossia::find_if(m_containers, [=] (ContainerItem* container) { return container->item() == item->item()->parentItem(); });
+  if(it == m_containers.end())
+  {
+    item->setParentId(ossia::none);
+  }
+  else
+  {
+    item->setParentId((*it)->id());
+  }
 
   connect(
       item, &GUIItem::removeMe, this,
@@ -236,6 +292,16 @@ void CentralItemModel::removeItem(GUIItem* item)
 void CentralItemModel::addContainer(ContainerItem* item)
 {
   m_containers.push_back(item);
+
+  auto it = ossia::find_if(m_containers, [=] (ContainerItem* container) { return container->item() == item->item()->parentItem(); });
+  if(it == m_containers.end())
+  {
+    item->setParentId(ossia::none);
+  }
+  else
+  {
+    item->setParentId((*it)->id());
+  }
 
   connect(
       item, &ContainerItem::removeMe, this,

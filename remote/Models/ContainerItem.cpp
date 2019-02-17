@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include <QQmlProperty>
 #include <QQuickItem>
+#include <score/serialization/JSONValueVisitor.hpp>
 namespace RemoteUI
 {
 
@@ -24,6 +25,10 @@ QJsonObject ContainerItem::save() const noexcept
   obj["x"] = x();
   obj["y"] = y();
   obj["z"] = z();
+  obj["width"] = width();
+  obj["height"] = height();
+  obj["id"] = id();
+  obj["parent"] = toJsonValue(parentId());
   return obj;
 }
 
@@ -45,6 +50,14 @@ qreal ContainerItem::y() const noexcept
 qreal ContainerItem::z() const noexcept
 {
   return QQmlProperty(m_item, "z").read().toReal();
+}
+qreal ContainerItem::width() const noexcept
+{
+  return QQmlProperty(m_item, "width").read().toReal();
+}
+qreal ContainerItem::height() const noexcept
+{
+  return QQmlProperty(m_item, "height").read().toReal();
 }
 
 }

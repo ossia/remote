@@ -1,6 +1,6 @@
 #pragma once
 #include <Device/Address/AddressSettings.hpp>
-
+#include <ossia/detail/optional.hpp>
 #include <QObject>
 
 namespace State
@@ -36,6 +36,9 @@ public:
   void enableListening(const Device::FullAddressSettings&);
   void disableListening(const Device::FullAddressSettings&);
 
+  ossia::optional<int32_t> parentId() const noexcept { return m_parentId; }
+  void setParentId(ossia::optional<int32_t> id) noexcept { m_parentId = id; }
+
   QQuickItem* item() const noexcept;
 
   qreal x() const noexcept;
@@ -65,5 +68,6 @@ protected:
   QString m_addrText;
   Device::FullAddressSettings m_addr;
   QMetaObject::Connection m_connection;
+  ossia::optional<int32_t> m_parentId{};
 };
 }

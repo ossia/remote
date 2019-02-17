@@ -28,7 +28,6 @@ public Q_SLOTS:
 
   void on_itemCreated(QString data, qreal x, qreal y, QQuickItem* parent);
   void on_addressCreated(QString data, qreal x, qreal y, QQuickItem* parent);
-  void loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y);
 
   void addItem(GUIItem* item);
   void removeItem(GUIItem* item);
@@ -36,6 +35,9 @@ public Q_SLOTS:
   void addContainer(ContainerItem* item);
   void removeContainer(ContainerItem* item);
 private:
+  void loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y, optional<int32_t> parent, QObject* parentItem);
+  void setup(QQuickItem& obj, qreal x, qreal y, QObject* parent);
+
   Context& m_ctx;
   QList<GUIItem*> m_guiItems;
   QList<ContainerItem*> m_containers;
