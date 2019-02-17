@@ -43,14 +43,14 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
   componentList["LineEdit"] = new RemoteUI::WidgetListData {
       "LineEdit", "LineEdit", "",
       QUrl("qrc:///qml/widgets/LineEdit.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/textedit.png"),
       factory<LineEdit>(),
       engine};
 
   componentList["Label"] = new RemoteUI::WidgetListData {
       "Label", "Label", "",
       QUrl("qrc:///qml/widgets/Label.qml"),
-      QUrl(),
+      QUrl("qrc:///resources/label.png"),
       factory<Label>(),
       engine};
 
@@ -89,6 +89,41 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl("qrc:///qml/widgets/Container.qml"),
       QUrl("qrc:///resources/container16.png"),
       factory<Container>(),
+      engine};
+
+
+  componentList["Graph"] = new RemoteUI::WidgetListData {
+      "Graph", "Graph", "",
+      QUrl("qrc:///qml/widgets/Graph.qml"),
+      QUrl("qrc:///resources/graph16.png"),
+      factory<Joystick>(),
+      engine};
+
+  componentList["Leds"] = new RemoteUI::WidgetListData {
+      "Leds", "Leds", "",
+      QUrl("qrc:///qml/widgets/Leds.qml"),
+      QUrl("qrc:///resources/leds16.png"),
+      factory<Leds>(),
+      engine};
+
+  componentList["Matrix"] = new RemoteUI::WidgetListData {
+      "Matrix", "Matrix", "",
+      QUrl("qrc:///qml/widgets/Matrix.qml"),
+      QUrl("qrc:///resources/matrix16.png"),
+      factory<Matrix>(),
+      engine};
+
+  componentList["Multislider"] = new RemoteUI::WidgetListData {
+      "Multislider", "Multislider", "",
+      QUrl("qrc:///qml/widgets/MultiSlider.qml"),
+      QUrl("qrc:///resources/multislider16.png"),
+      factory<MultiSlider>(),
+      engine};
+  componentList["Graph"] = new RemoteUI::WidgetListData {
+      "Graph", "Graph", "",
+      QUrl("qrc:///qml/widgets/Graph.qml"),
+      QUrl("qrc:///resources/graph16.png"),
+      factory<Graph>(),
       engine};
 
   // QML absolutely wants a QList<QObject*>

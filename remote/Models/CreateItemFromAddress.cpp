@@ -112,6 +112,22 @@ void CheckBox::setAddressImpl(const Device::FullAddressSettings& addr)
   addr.value.apply(SetCheckboxAddress {*this, addr});
 }
 
+void Leds::setAddressImpl(const Device::FullAddressSettings& addr)
+{
+}
+
+void Matrix::setAddressImpl(const Device::FullAddressSettings& addr)
+{
+}
+
+void Graph::setAddressImpl(const Device::FullAddressSettings& addr)
+{
+}
+
+void MultiSlider::setAddressImpl(const Device::FullAddressSettings& addr)
+{
+}
+
 GUIItem* createItem(const Device::AddressSettings& as, Context& ctx)
 {
   return apply_to_address(as, AddressItemFactory {ctx});

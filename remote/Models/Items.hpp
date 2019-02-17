@@ -321,4 +321,84 @@ private:
   }
 };
 
+class Leds
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
+class Matrix
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
+
+class Graph
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+
+  struct GraphValueVisitor
+  {
+    Graph& g;
+    void operator()(float v)
+    {
+      QMetaObject::invokeMethod(g.item(), "pushValue",
+              Q_ARG(QVariant, v));
+    }
+    void operator()(int v)
+    {
+      QMetaObject::invokeMethod(g.item(), "pushValue",
+              Q_ARG(QVariant, v));
+    }
+
+    template<typename T>
+    void operator()(const T& v) { }
+
+    void operator()() { }
+  };
+
+
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
+  {
+    m.value.apply(GraphValueVisitor{*this});
+  }
+};
+
+class MultiSlider
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
 }

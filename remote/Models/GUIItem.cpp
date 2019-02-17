@@ -98,9 +98,35 @@ void GUIItem::setAddress(QString data)
   }
 }
 
+ossia::net::node_base* get_node(Context& m_ctx, const State::Address& m)
+{
+  auto dev_name = m.device.toStdString();
+  auto dev_it = ossia::find_if(m_ctx.device, [&](const auto& dev) {
+    return dev->get_name() == dev_name;
+  });
+  if (dev_it != m_ctx.device.end())
+  {
+    auto& dev = **dev_it;
+    return ossia::net::find_node(dev, ("/" + m.path.join("/")).toStdString());
+  }
+  return nullptr;
+}
+
 void GUIItem::setAddress(const Device::FullAddressSettings& addr)
 {
   m_addr = addr;
+
+  if(auto n = get_node(m_ctx, addr.address))
+  {
+    if (auto p = n->get_parameter())
+    {
+      p->add_callback([this, addr=m_addr.address] (const ossia::value& v) {
+        QMetaObject::invokeMethod(this, [this, mess=State::Message{State::AddressAccessor{addr}, v}] {
+          setValue(mess);
+        }, Qt::QueuedConnection);
+      });
+    }
+  }
 
   setAddressImpl(m_addr);
 

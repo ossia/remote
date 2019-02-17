@@ -119,7 +119,7 @@ Item {
 
         anchors.centerIn: parent
         width: 180
-        height: 150
+        height: 250
 
         highlightFollowsCurrentItem: true
         clip: true

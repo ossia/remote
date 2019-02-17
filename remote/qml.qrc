@@ -15,16 +15,20 @@
         <file>qml/widgets/AddressDrop.qml</file>
         <file>qml/widgets/AddressLabel.qml</file>
         <file>qml/widgets/Label.qml</file>
-        <file>resources/slider.png</file>
-        <file>resources/switch.png</file>
-        <file>resources/drag_switch.png</file>
-        <file>resources/drag_hslider.png</file>
-        <file>resources/drag_vslider.png</file>
         <file>qml/widgets/RGBSlider.qml</file>
         <file>qml/widgets/XYPad.qml</file>
         <file>qml/widgets/HSVSlider.qml</file>
         <file>qml/widgets/Joystick.qml</file>
         <file>qml/widgets/Container.qml</file>
+        <file>qml/widgets/Graph.qml</file>
+        <file>qml/widgets/Leds.qml</file>
+        <file>qml/widgets/Matrix.qml</file>
+        <file>qml/widgets/MultiSlider.qml</file>
+        <file>resources/slider.png</file>
+        <file>resources/switch.png</file>
+        <file>resources/drag_switch.png</file>
+        <file>resources/drag_hslider.png</file>
+        <file>resources/drag_vslider.png</file>
         <file>resources/angleSlider16.png</file>
         <file>resources/container16.png</file>
         <file>resources/donutSlider16.png</file>
@@ -33,7 +37,7 @@
         <file>resources/joystick16.png</file>
         <file>resources/keyboard16.png</file>
         <file>resources/leds16.png</file>
-        <file>resources/matri16.png</file>
+        <file>resources/matrix16.png</file>
         <file>resources/multislider16.png</file>
         <file>resources/pad16.png</file>
         <file>resources/rgbSlider16.png</file>
@@ -42,5 +46,7 @@
         <file>resources/switch16.png</file>
         <file>resources/toggleSwitch16.png</file>
         <file>resources/hslider.png</file>
+        <file>resources/textedit.png</file>
+        <file>resources/label.png</file>
     </qresource>
 </RCC>

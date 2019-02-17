@@ -18,7 +18,7 @@ MainPageForm {
 
             WidgetList {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 186; implicitHeight: 156}
+                Layout.preferredWidth: 186; implicitHeight: 250}
 
             NodeTree {
                 Layout.alignment: Qt.AlignHCenter
