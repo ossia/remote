@@ -5,76 +5,8 @@
 namespace RemoteUI
 {
 
-template <typename Fun>
-auto apply_to_address(
-    const ossia::value& v, const ossia::domain& d, const ossia::unit_t& u,
-    Fun&& f)
-  -> typename Fun::return_type
-{
-  using return_type = typename Fun::return_type;
-  if (v.valid())
-  {
-    return ossia::apply_nonnull(
-          [&](const auto& v) -> return_type {
-      if (d)
-      {
-        return ossia::apply_nonnull(
-              [&](const auto& dom) -> return_type {
-          if (u)
-          {
-            return ossia::apply_nonnull(
-                  [&](const auto& ds) -> return_type {
-              return ossia::apply_nonnull(
-                    [&](const auto& u) -> return_type {
-                return f(v, dom, u);
-              }, ds);
-            },
-            u.v);
-          }
-          else
-          {
-            return f(v, dom, unused_t {});
-          }
-        },
-        d.v);
-      }
-      else
-      {
-        if (u)
-        {
-          return ossia::apply_nonnull(
-                [&](const auto& ds) -> return_type {
-            return ossia::apply_nonnull(
-                  [&](const auto& u) -> return_type {
-              return f(v, unused_t {}, u); }, ds);
-          },
-          u.v);
-        }
-        else
-        {
-          return f(v, unused_t {}, unused_t {});
-        }
-      }
-    },
-    v);
-  }
 
-  if constexpr(!std::is_same_v<return_type, void>)
-      return {};
-}
-
-// AddressSettings or FullAddressSettings
-template <typename Addr, typename Fun>
-auto apply_to_address(
-    const Addr& addr,
-    Fun&& f)
-{
-  return apply_to_address(
-        addr.value, addr.domain.get(), addr.unit.get(),
-        std::forward<Fun>(f));
-}
-
-class Slider
+class Slider final
     : public GUIItem
 {
   Q_OBJECT
@@ -88,17 +20,14 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    apply_to_address(addr, SetSliderAddress {*this, addr});
-  }
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
 
-  void setValue(const State::Message& m)
+  void setValue(const State::Message& m) override
   {
   }
 };
 
-class CheckBox
+class CheckBox final
     : public GUIItem
 {
   Q_OBJECT
@@ -112,16 +41,13 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    addr.value.apply(SetCheckboxAddress {*this, addr});
-  }
-  void setValue(const State::Message& m)
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
   {
   }
 };
 
-class LineEdit
+class LineEdit final
     : public GUIItem
 {
   Q_OBJECT
@@ -146,12 +72,12 @@ private:
   {
     addr.value.apply(SetLineEditAddress {*this, addr});
   }
-  void setValue(const State::Message& m)
+  void setValue(const State::Message& m) override
   {
   }
 };
 
-class Label
+class Label final
     : public GUIItem
 {
   Q_OBJECT
@@ -164,14 +90,14 @@ private:
     addr.value.apply(SetLabelAddress {*this, addr});
   }
 
-  void setValue(const State::Message& m)
+  void setValue(const State::Message& m) override
   {
     m.value.apply(SetLabelAddress{*this, m_addr});
   }
 
 };
 
-class PushButton
+class PushButton final
     : public GUIItem
 {
   Q_OBJECT
@@ -185,17 +111,13 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    m_connection = QObject::connect(
-          item(), SIGNAL(clicked()), this, SLOT(on_valueChanged()));
-  }
-  void setValue(const State::Message& m)
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
   {
   }
 };
 
-class RGBSlider
+class RGBSlider final
     : public GUIItem
 {
   Q_OBJECT
@@ -257,10 +179,7 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    apply_to_address(addr, SetRGBAddress {*this, addr});
-  }
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
   void setValue(const State::Message& m) override
   {
   }
@@ -329,10 +248,7 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    apply_to_address(addr, SetHSVAddress {*this, addr});
-  }
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
   void setValue(const State::Message& m) override
   {
   }
@@ -358,10 +274,7 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    apply_to_address(addr, SetXYAddress {*this, addr});
-  }
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
   void setValue(const State::Message& m) override
   {
   }
@@ -388,12 +301,24 @@ public Q_SLOTS:
   }
 
 private:
-  void setAddressImpl(const Device::FullAddressSettings& addr) override
-  {
-    apply_to_address(addr, SetJoystickAddress {*this, addr});
-  }
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
   void setValue(const State::Message& m) override
   {
   }
 };
+
+class Container
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override;
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
 }

@@ -13,6 +13,7 @@ class QQmlApplicationEngine;
 namespace RemoteUI
 {
 class GUIItem;
+class ContainerItem;
 
 //! Data model for the control surface: just a list of widgets
 class CentralItemModel : public QObject
@@ -25,17 +26,19 @@ public Q_SLOTS:
   void load(QUrl path);
   void save(QUrl path);
 
-  void on_itemCreated(QString data, qreal x, qreal y);
-  void on_addressCreated(QString data, qreal x, qreal y);
+  void on_itemCreated(QString data, qreal x, qreal y, QQuickItem* parent);
+  void on_addressCreated(QString data, qreal x, qreal y, QQuickItem* parent);
   void loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y);
 
   void addItem(GUIItem* item);
   void removeItem(GUIItem* item);
 
+  void addContainer(ContainerItem* item);
+  void removeContainer(ContainerItem* item);
 private:
   Context& m_ctx;
   QList<GUIItem*> m_guiItems;
-  QQuickItem* create(const QString& c);
+  QList<ContainerItem*> m_containers;
 };
 }
 #endif // CENTRALITEMMODEL_H

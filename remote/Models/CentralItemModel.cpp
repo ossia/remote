@@ -1,6 +1,7 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check
 // it. PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "CentralItemModel.hpp"
+#include "ContainerItem.hpp"
 #include "CreateItemFromAddress.hpp"
 
 #include "WidgetListModel.hpp"
@@ -14,7 +15,6 @@
 #include <QJsonDocument>
 
 #include <Models/NodeModel.hpp>
-#include <WebSocketClient.hpp>
 
 namespace RemoteUI
 {
@@ -27,34 +27,44 @@ CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
   connect(ctx.centralItem, SIGNAL(save(QUrl)),
           this, SLOT(save(QUrl)));
   connect(
-      ctx.centralItem, SIGNAL(createObject(QString, qreal, qreal)), this,
-      SLOT(on_itemCreated(QString, qreal, qreal)));
+      ctx.centralItem, SIGNAL(createObject(QString, qreal, qreal, QQuickItem*)), this,
+      SLOT(on_itemCreated(QString, qreal, qreal, QQuickItem*)));
   connect(
-      ctx.centralItem, SIGNAL(createAddress(QString, qreal, qreal)), this,
-        SLOT(on_addressCreated(QString, qreal, qreal)));
+      ctx.centralItem, SIGNAL(createAddress(QString, qreal, qreal, QQuickItem*)), this,
+        SLOT(on_addressCreated(QString, qreal, qreal, QQuickItem*)));
 }
 
 void CentralItemModel::save(QUrl path)
 {
-  QJsonArray arr;
+  QJsonArray items;
   for(auto item : m_guiItems)
   {
-    QJsonObject obj;
-    obj["x"] = item->x();
-    obj["y"] = item->y();
-    obj["settings"] = toJsonObject(item->addressSettings());
-    obj["type"] = item->type();
-    arr.push_back(obj);
+    items.push_back(item->save());
   }
 
-  QJsonObject main;
-  main["Items"] = arr;
-  QByteArray txt = QJsonDocument{main}.toJson();
+  QJsonArray containers;
+  for(auto item : m_containers)
+  {
+    containers.push_back(item->save());
+  }
+
+
+  QJsonObject page;
+  page["Items"] = items;
+  page["Containers"] = containers;
+  QJsonArray pages;
+  pages.push_back(page);
+
+  QJsonObject root;
+  root["Pages"] = pages;
+
+  QByteArray txt = QJsonDocument{root}.toJson();
 
   QFile f(path.toLocalFile());
   if(f.open(QIODevice::WriteOnly))
     f.write(txt);
 }
+
 void CentralItemModel::load(QUrl path)
 {
   QFile f(path.toLocalFile());
@@ -65,14 +75,15 @@ void CentralItemModel::load(QUrl path)
   if(!txt.isObject())
     return;
 
-  const auto items = txt.object()["Items"].toArray();
-  if(items.isEmpty())
-    return;
 
   for(auto item : m_guiItems)
     delete item;
   m_guiItems.clear();
+  for(auto item : m_containers)
+    delete item;
+  m_containers.clear();
 
+  const auto items = txt.object()["Items"].toArray();
   for(const auto& item : items)
   {
     double x = item["x"].toDouble();
@@ -82,47 +93,61 @@ void CentralItemModel::load(QUrl path)
 
     loadItem(std::move(type), std::move(addr), x, y);
   }
+
+  const auto containers = txt.object()["Containers"].toArray();
+  for(const auto& item : containers)
+  {
+    double x = item["x"].toDouble();
+    double y = item["y"].toDouble();
+
+    loadItem("Container", {}, x, y);
+  }
 }
 
-
-QQuickItem* CentralItemModel::create(const QString& c)
+template<typename T>
+static auto setup(T& obj, qreal x, qreal y, QObject* parent)
 {
-  auto comp = m_ctx.widgets[c]->component();
+  QQmlProperty(&obj, "parent").write(QVariant::fromValue(parent));
+  QQmlProperty(&obj, "x").write(x);
+  QQmlProperty(&obj, "y").write(y);
+}
+
+static auto createContainer(Context& m_ctx)
+{
+  auto w = m_ctx.widgets["Container"];
+  auto comp = w->component();
   auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
-  QQmlProperty(obj, "parent")
-      .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
-  return obj;
+  return std::pair{w, obj};
 }
 
-void CentralItemModel::on_itemCreated(QString widgetName, qreal x, qreal y)
+void CentralItemModel::on_itemCreated(QString type, qreal x, qreal y, QQuickItem* parent)
 {
-  auto it = m_ctx.widgets.find(widgetName);
+  auto it = m_ctx.widgets.find(type);
   if (it != m_ctx.widgets.end())
   {
     WidgetListData& factory = *(*it);
     QQmlComponent& comp = *factory.component();
-
-    // Create the object
-    auto obj = (QQuickItem*)comp.create(m_ctx.engine.rootContext());
-    if (obj)
+    if (auto obj = (QQuickItem*)comp.create(m_ctx.engine.rootContext()))
     {
-      QQmlProperty(obj, "parent")
-          .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
-
       // Put its center where the mouse is
-      QQmlProperty(obj, "x").write(x - obj->width() / 2.);
-      QQmlProperty(obj, "y").write(y - obj->height() / 2.);
-
-      addItem(factory.widgetFactory()(m_ctx, &factory, obj));
-    }
-    else
-    {
-      qDebug() << "Error: object " << widgetName << "could not be created";
+      setup(*obj, x - obj->width() / 2., y - obj->height() / 2., parent);
+      if(type != "Container")
+      {
+        addItem(factory.widgetFactory()(m_ctx, &factory, obj));
+        return;
+      }
+      else
+      {
+        addContainer(new ContainerItem{m_ctx, &factory, obj});
+        return;
+      }
     }
   }
+
+  qDebug() << "Error: object " << type << "could not be created";
 }
 
-void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
+void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y, QQuickItem* parent)
 {
   if (auto address = State::parseAddressAccessor(data))
   {
@@ -130,25 +155,31 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
     if (n)
     {
       auto as = n->target<Device::AddressSettings>();
-      if (as && as->value.valid())
+      if (as)
       {
-        // We try to create a relevant component according to the type of the
-        // value.
-        auto item = apply_to_address(*as, AddressItemFactory {m_ctx});
-
-
-        if (item)
+        if(as->value.valid())
         {
-          item->setAddress(
-              Device::FullAddressSettings::make<
-                  Device::FullAddressSettings::as_child>(*as, *address));
+          // We try to create a relevant component according to the type of the
+          // value.
+          auto item = createItem(*as, m_ctx);
 
-          auto obj = item->item();
-          // Put its center where the mouse is
-          QQmlProperty(obj, "x").write(x - obj->width() / 2.);
-          QQmlProperty(obj, "y").write(y - obj->height() / 2.);
+          if (item)
+          {
+            item->setAddress(
+                Device::FullAddressSettings::make<
+                    Device::FullAddressSettings::as_child>(*as, *address));
 
-          addItem(item);
+            auto obj = item->item();
+            setup(*obj, x - obj->width() / 2., y - obj->height() / 2., parent);
+
+            addItem(item);
+          }
+        }
+        else
+        {
+          auto [w, obj] = createContainer(m_ctx);
+          setup(*obj, x - obj->width() / 2., y - obj->height() / 2., parent);
+          addContainer(new ContainerItem{m_ctx, w, obj});
         }
       }
     }
@@ -159,17 +190,26 @@ void CentralItemModel::loadItem(QString type, Device::FullAddressSettings addres
 {
   // We try to create a relevant component according to the type of the
   // value.
-  auto item = AddressItemFactory {m_ctx}.createItem(type);
-  if (item)
+  if(type != "Container")
   {
-    item->setAddress(std::move(address));
+    auto item = AddressItemFactory {m_ctx}.createItem(type);
+    if (item)
+    {
+      item->setAddress(std::move(address));
 
-    auto obj = item->item();
+      auto obj = item->item();
 
-    QQmlProperty(obj, "x").write(x);
-    QQmlProperty(obj, "y").write(y);
+      setup(*obj, x, y, (QObject*)m_ctx.centralItem);
 
-    addItem(item);
+      addItem(item);
+    }
+  }
+  else
+  {
+    auto [w, obj] = createContainer(m_ctx);
+    setup(*obj, x, y, (QObject*)m_ctx.centralItem);
+
+    addContainer(new ContainerItem{m_ctx, w, obj});
   }
 }
 
@@ -187,6 +227,26 @@ void CentralItemModel::addItem(GUIItem* item)
 }
 
 void CentralItemModel::removeItem(GUIItem* item)
+{
+  // TODO
+}
+
+
+
+void CentralItemModel::addContainer(ContainerItem* item)
+{
+  m_containers.push_back(item);
+
+  connect(
+      item, &ContainerItem::removeMe, this,
+      [=] {
+        m_containers.removeOne(item);
+        item->deleteLater();
+      },
+      Qt::QueuedConnection);
+}
+
+void CentralItemModel::removeContainer(ContainerItem* item)
 {
   // TODO
 }

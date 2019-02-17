@@ -18,8 +18,6 @@ struct AddressItemFactory
     auto w = m_ctx.widgets[name];
     auto comp = w->component();
     auto obj = (QQuickItem*)comp->create(m_ctx.engine.rootContext());
-    QQmlProperty(obj, "parent")
-        .write(QVariant::fromValue((QObject*)m_ctx.centralItem));
     return w->widgetFactory()(m_ctx, w, obj);
   }
 
@@ -173,6 +171,12 @@ struct AddressItemFactory
     }
     return nullptr; //createItem("LineEdit");
   }
+  GUIItem* operator()(const unused_t&, const unused_t&, const unused_t&) const
+  {
+    return createItem("Container");
+  }
+
 };
 
+GUIItem* createItem(const Device::AddressSettings& settings, Context& ctx);
 }

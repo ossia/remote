@@ -52,8 +52,8 @@ CentralAreaForm {
 
             signal load(url u);
             signal save(url u);
-            signal createObject(string objname, real x, real y)
-            signal createAddress(string objname, real x, real y)
+            signal createObject(string objname, real x, real y, Item p)
+            signal createAddress(string objname, real x, real y, Item p)
 
             width:2000
             height:2000
@@ -117,7 +117,7 @@ CentralAreaForm {
             // Create a component
             if(draggedItem != null)
             {
-                var res = draggedItem.dropper.dropping(drop);
+                var res = draggedItem.dropper.dropping(drop, centralItem);
                 if(res)
                     drop.acceptProposedAction();
             }
@@ -127,15 +127,14 @@ CentralAreaForm {
                 var drop_text = drop.getDataAsString(drop_fmt);
                 if(drop_fmt === "iscore/x-remote-widget")
                 {
-                    centralItem.createObject(drop_text, drop.x, drop.y);
+                    centralItem.createObject(drop_text, drop.x, drop.y, centralItem);
                     drop.acceptProposedAction();
                 }
                 else if(drop_fmt === "iscore/x-remote-address")
                 {
-                    centralItem.createAddress(drop_text, drop.x, drop.y);
+                    centralItem.createAddress(drop_text, drop.x, drop.y, centralItem);
                     drop.acceptProposedAction();
                 }
-
             }
             draggedItem = null;
             centralItem.color = "#302d2e"

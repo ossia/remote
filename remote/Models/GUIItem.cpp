@@ -39,6 +39,16 @@ GUIItem::~GUIItem()
   m_item->deleteLater();
 }
 
+QJsonObject GUIItem::save() const noexcept
+{
+  QJsonObject obj;
+  obj["x"] = x();
+  obj["y"] = y();
+  obj["settings"] = toJsonObject(addressSettings());
+  obj["type"] = type();
+  return obj;
+}
+
 QQuickItem*GUIItem::item() const noexcept
 {
   return m_item;

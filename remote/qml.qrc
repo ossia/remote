@@ -24,5 +24,6 @@
         <file>qml/widgets/XYPad.qml</file>
         <file>qml/widgets/HSVSlider.qml</file>
         <file>qml/widgets/Joystick.qml</file>
+        <file>qml/widgets/Container.qml</file>
     </qresource>
 </RCC>

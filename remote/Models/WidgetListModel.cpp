@@ -84,6 +84,12 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl(),
       factory<Joystick>(),
       engine};
+  componentList["Container"] = new RemoteUI::WidgetListData {
+      "Container", "Container", "",
+      QUrl("qrc:///qml/widgets/Container.qml"),
+      QUrl(),
+      factory<Container>(),
+      engine};
 
   // QML absolutely wants a QList<QObject*>
   for (auto l : componentList)

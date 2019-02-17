@@ -162,6 +162,8 @@ struct SetSliderAddress
         item.item(), SIGNAL(valueChange(qreal)), &item,
         SLOT(on_valueChanged(qreal)));
   }
+
+  void operator()(const unused_t&, const unused_t&, const unused_t&) { }
 };
 
 struct SetCheckboxAddress

@@ -31,6 +31,8 @@ public:
   GUIItem(Context& ctx, RemoteUI::WidgetListData* factory, QQuickItem* it);
   ~GUIItem();
 
+  QJsonObject save() const noexcept;
+
   void enableListening(const Device::FullAddressSettings&);
   void disableListening(const Device::FullAddressSettings&);
 
