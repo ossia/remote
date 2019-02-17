@@ -28,7 +28,7 @@ public:
   WidgetListData(QString name, QString prettyName,
       QString dragImageSource, QUrl comp, QUrl image,
       ItemFactory widgetFactory,
-      QQmlApplicationEngine& eng)
+      QQmlApplicationEngine& eng) noexcept
       : m_name {name}
       , m_prettyName {prettyName}
       , m_dragImageSource {dragImageSource}
@@ -43,36 +43,36 @@ public:
 
   ~WidgetListData();
 
-  QString name() const
+  const QString& name() const noexcept
   {
     return m_name;
   }
 
-  QString dragImageSource() const
+  const QString& dragImageSource() const noexcept
   {
     return m_dragImageSource;
   }
 
-  const QQmlComponent* component() const
+  const QQmlComponent* component() const noexcept
   {
     return &m_component;
   }
-  QQmlComponent* component()
+  QQmlComponent* component() noexcept
   {
     return &m_component;
   }
 
-  QString prettyName() const
+  const QString& prettyName() const noexcept
   {
     return m_prettyName;
   }
 
-  const QUrl& image() const
+  const QUrl& image() const noexcept
   {
     return m_image;
   }
 
-  const ItemFactory& widgetFactory() const
+  const ItemFactory& widgetFactory() const noexcept
   {
     return m_widgetFactory;
   }

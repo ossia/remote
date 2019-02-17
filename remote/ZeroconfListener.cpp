@@ -2,6 +2,7 @@
 
 #include <Device/Address/AddressSettings.hpp>
 #include <Device/Node/DeviceNode.hpp>
+#include <Device/Protocol/DeviceInterface.hpp>
 
 #include <ossia/network/common/node_visitor.hpp>
 #include <ossia/network/generic/generic_device.hpp>
@@ -14,63 +15,6 @@
 
 namespace RemoteUI
 {
-
-static Device::AddressSettings
-ToAddressSettings(const ossia::net::node_base& node)
-{
-  Device::AddressSettings s;
-  const auto& addr = node.get_parameter();
-
-  if (addr)
-  {
-    addr->request_value();
-
-    s.name = QString::fromStdString(node.get_name());
-    s.ioType = ossia::access_mode::BI; // addr->get_access();
-    s.clipMode = addr->get_bounding();
-    s.repetitionFilter = addr->get_repetition_filter();
-    s.unit = addr->get_unit();
-    s.extendedAttributes = node.get_extended_attributes();
-    s.domain = addr->get_domain();
-
-    try
-    {
-      s.value = addr->value();
-    }
-    catch (...)
-    {
-      s.value = ossia::init_value(addr->get_value_type());
-    }
-  }
-  else
-  {
-    s.name = QString::fromStdString(node.get_name());
-  }
-  return s;
-}
-
-Device::Node ToDeviceExplorer(const ossia::net::node_base& ossia_node)
-{
-  Device::Node score_node {ToAddressSettings(ossia_node), nullptr};
-  {
-    const auto& cld = ossia_node.children();
-    score_node.reserve(cld.size());
-
-    // 2. Recurse on the children
-    for (const auto& ossia_child : cld)
-    {
-      if (!ossia::net::get_hidden(*ossia_child)
-          && !ossia::net::get_zombie(*ossia_child))
-      {
-        auto child_n = ToDeviceExplorer(*ossia_child);
-        child_n.setParent(&score_node);
-        score_node.push_back(std::move(child_n));
-      }
-    }
-  }
-  return score_node;
-}
-
 ZeroconfListener::ZeroconfListener(Context& ctx)
     : context {ctx}, service {"_oscjson._tcp"}
 {
@@ -133,7 +77,7 @@ void ZeroconfListener::instanceAdded(const std::string& instance)
             "ws://" + ip + ":" + port),
         instance);
     clt->get_protocol().update(clt->get_root_node());
-    auto n = ToDeviceExplorer(clt->get_root_node());
+    auto n = Device::ToDeviceExplorer(clt->get_root_node());
     n.set(
         Device::DeviceSettings {{}, QString::fromStdString(clt->get_name())});
     context.nodes.add_device(std::move(n));

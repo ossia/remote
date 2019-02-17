@@ -1,18 +1,20 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.3
+
 Item {
 
     id: widgList
 
     Component {
         id: itemFiller
-        Item { Layout.fillHeight: true}
+        Item {
+            Layout.fillHeight: true
+        }
     }
     Component {
         id: nameDelegate
 
-        Rectangle
-        {
+        Rectangle {
             id: delegateLayout
 
             height: theView.cellHeight
@@ -24,6 +26,10 @@ Item {
 
             Image {
                 id: img
+                width: theView.cellHeight - 6
+                height: theView.cellHeight - 6
+                x: 3
+                y: 3
             }
 
             MouseArea {
@@ -33,34 +39,38 @@ Item {
                 drag.target: draggable
 
                 hoverEnabled: true
-                onEntered: displayName()
-                onExited: hideName()
+                onEntered: if (image.toString() !== "")
+                               displayName()
+                onExited: if (image.toString() !== "")
+                              hideName()
             }
-            function displayName(){
-                label.opacity = 1.;
-                nameObj.text = name;
+            function displayName() {
+                label.opacity = 1.
+                nameObj.text = name
             }
-            function hideName(){
-                label.opacity = 0.;
-                nameObj.text = "";
+            function hideName() {
+                label.opacity = 0.
+                nameObj.text = ""
             }
-            Item{
+            Item {
                 id: label
 
                 z: 10
                 anchors.fill: parent
-                opacity: 0
-                Behavior on opacity {NumberAnimation{easing.type: Easing.InOutQuad}}
+                Behavior on opacity {
+                    NumberAnimation {
+                        easing.type: Easing.InOutQuad
+                    }
+                }
 
-
-                Rectangle{
-                    color:  "grey"//"#302d2e"
+                Rectangle {
+                    color: "grey" //"#302d2e"
                     opacity: 0.9
                     border.width: 1
                     border.color: "#302d2e"
                     anchors.fill: parent
                 }
-                Text{
+                Text {
                     id: nameObj
 
                     text: ""
@@ -71,13 +81,19 @@ Item {
                     verticalAlignment: Text.AlignBottom
                     wrapMode: Text.WordWrap
                     font.bold: true
-                     color: "#161516"
+                    color: "#161516"
                 }
             }
 
             Component.onCompleted: {
-                img.source = image
-                itemFiller.createObject(delegateLayout, {});
+                if (image.toString() !== "") {
+                    img.source = image
+                    hideName()
+                } else {
+                    displayName()
+                }
+
+                itemFiller.createObject(delegateLayout, { })
             }
 
             Item {
@@ -88,7 +104,9 @@ Item {
                 Drag.hotSpot.x: 10
                 Drag.hotSpot.y: 10
 
-                Drag.mimeData: { "iscore/x-remote-widget": name }
+                Drag.mimeData: {
+                    "iscore/x-remote-widget": name
+                }
                 Drag.dragType: Drag.Automatic
                 Drag.imageSource: dragImageSource != "" ? "qrc:/resources/" + dragImageSource : ""
             }
@@ -109,8 +127,5 @@ Item {
 
         cellWidth: 60
         cellHeight: 60
-
     }
-
-
 }

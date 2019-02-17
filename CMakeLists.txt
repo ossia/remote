@@ -20,10 +20,10 @@ endif()
 set(CPACK_PACKAGE_NAME "ossia remote")
 set(CPACK_PACKAGE_VENDOR "ossia")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ossia remote, a remote for OSCQuery devices")
-set(CPACK_PACKAGE_VERSION "1.0.0")
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_SOURCE_GENERATOR TGZ)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "remote")
@@ -49,7 +49,16 @@ set(OSSIA_QT ON CACHE "" INTERNAL)
 set(OSSIA_QML_DEVICE OFF CACHE "" INTERNAL)
 set(OSSIA_QML_SCORE OFF CACHE "" INTERNAL)
 
-add_subdirectory(score/API)
+set(SCORE_CONFIGURATION minimal-plugins CACHE "" INTERNAL)
+set(SCORE_EMBEDDED 1 CACHE "" INTERNAL)
+set(SCORE_STATIC_PLUGINS 1 CACHE "" INTERNAL)
+
+set(SCORE_PLUGINS_TO_BUILD
+  score-lib-state
+  score-lib-device
+  CACHE "" INTERNAL
+  )
+add_subdirectory(score/)
 
 set(SRCS
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/CreateItemFromAddress.hpp"
@@ -70,16 +79,6 @@ set(SRCS
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/Models/GUIItem.cpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/RemoteApplication.cpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/remote/ZeroconfListener.cpp"
-
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/lib/score/serialization/StringConstants.cpp"
-
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-device/Device/Address/AddressSettings.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-device/Device/Node/DeviceNode.cpp"
-
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/Domain.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/Value.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/ValueConversion.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/score/base/plugins/score-lib-state/State/Address.cpp"
 
 "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/graph.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qml-creative-controls/src/creativecontrolsplugin.hpp"
@@ -138,6 +137,10 @@ target_link_libraries(remote
     ossia
     Qt5::Core Qt5::Widgets Qt5::Qml
     Servus_iface
+    score_lib_base
+    score_lib_state
+    score_lib_device
+    ${CMAKE_DL_LIBS}
 )
 
 target_include_directories(remote

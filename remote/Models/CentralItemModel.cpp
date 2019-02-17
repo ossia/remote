@@ -36,14 +36,13 @@ CentralItemModel::CentralItemModel(Context& ctx, QObject* parent)
 
 void CentralItemModel::save(QUrl path)
 {
-  qDebug() << "savingh: " << path;
   QJsonArray arr;
   for(auto item : m_guiItems)
   {
     QJsonObject obj;
     obj["x"] = item->x();
     obj["y"] = item->y();
-    obj["address"] = item->address();
+    obj["settings"] = toJsonObject(item->addressSettings());
     obj["type"] = item->type();
     arr.push_back(obj);
   }
@@ -78,10 +77,10 @@ void CentralItemModel::load(QUrl path)
   {
     double x = item["x"].toDouble();
     double y = item["y"].toDouble();
-    QString address = item["address"].toString();
+    auto addr = fromJsonObject<Device::FullAddressSettings>(item["settings"]);
     QString type = item["type"].toString();
 
-    loadItem(type, address, x, y);
+    loadItem(std::move(type), std::move(addr), x, y);
   }
 }
 
@@ -156,34 +155,21 @@ void CentralItemModel::on_addressCreated(QString data, qreal x, qreal y)
   }
 }
 
-void CentralItemModel::loadItem(QString type, QString addr, qreal x, qreal y)
+void CentralItemModel::loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y)
 {
-  if (auto address = State::parseAddressAccessor(addr))
+  // We try to create a relevant component according to the type of the
+  // value.
+  auto item = AddressItemFactory {m_ctx}.createItem(type);
+  if (item)
   {
-    auto n = Device::try_getNodeFromAddress(m_ctx.nodes.rootNode(), address->address);
-    if (n)
-    {
-      auto as = n->target<Device::AddressSettings>();
-      if (as && as->value.valid())
-      {
-        // We try to create a relevant component according to the type of the
-        // value.
-        auto item = AddressItemFactory {m_ctx}.createItem(type);
-        if (item)
-        {
-          item->setAddress(
-              Device::FullAddressSettings::make<
-                  Device::FullAddressSettings::as_child>(*as, *address));
+    item->setAddress(std::move(address));
 
-          auto obj = item->item();
-          // Put its center where the mouse is
-          QQmlProperty(obj, "x").write(x - obj->width() / 2.);
-          QQmlProperty(obj, "y").write(y - obj->height() / 2.);
+    auto obj = item->item();
 
-          addItem(item);
-        }
-      }
-    }
+    QQmlProperty(obj, "x").write(x);
+    QQmlProperty(obj, "y").write(y);
+
+    addItem(item);
   }
 }
 

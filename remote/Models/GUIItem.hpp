@@ -31,17 +31,17 @@ public:
   GUIItem(Context& ctx, RemoteUI::WidgetListData* factory, QQuickItem* it);
   ~GUIItem();
 
-  QQuickItem* item() const
-  {
-    return m_item;
-  }
-
   void enableListening(const Device::FullAddressSettings&);
   void disableListening(const Device::FullAddressSettings&);
-  qreal x() const;
-  qreal y() const;
-  QString address() const;
-  QString type() const;
+
+  QQuickItem* item() const noexcept;
+
+  qreal x() const noexcept;
+  qreal y() const noexcept;
+  QString address() const noexcept;
+  const QString& type() const noexcept;
+
+  const Device::FullAddressSettings& addressSettings() const noexcept;
 
 Q_SIGNALS:
   void removeMe();

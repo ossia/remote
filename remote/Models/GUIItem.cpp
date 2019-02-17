@@ -2,6 +2,7 @@
 // it. PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include "GUIItem.hpp"
 
+#include <Device/Address/AddressSettings.hpp>
 #include <Device/Node/DeviceNode.hpp>
 #include <State/Expression.hpp>
 #include <State/ValueParser.hpp>
@@ -38,22 +39,32 @@ GUIItem::~GUIItem()
   m_item->deleteLater();
 }
 
-qreal GUIItem::x() const
+QQuickItem*GUIItem::item() const noexcept
+{
+  return m_item;
+}
+
+qreal GUIItem::x() const noexcept
 {
   return QQmlProperty(m_item, "x").read().toReal();
 }
 
-qreal GUIItem::y() const
+qreal GUIItem::y() const noexcept
 {
   return QQmlProperty(m_item, "y").read().toReal();
 }
 
-QString GUIItem::address() const
+const Device::FullAddressSettings&GUIItem::addressSettings() const noexcept
+{
+  return m_addr;
+}
+
+QString GUIItem::address() const noexcept
 {
   return m_addr.address.toString();
 }
 
-QString GUIItem::type() const
+const QString & GUIItem::type() const noexcept
 {
   return m_factory->name();
 }

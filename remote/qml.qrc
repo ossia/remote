@@ -7,7 +7,6 @@
         <file>qml/CentralArea.qml</file>
         <file>qml/NodeTree.qml</file>
         <file>qml/CentralAreaForm.ui.qml</file>
-        <file>qml/WidgetListForm.ui.qml</file>
         <file>qml/widgets/Button.qml</file>
         <file>qml/widgets/HSlider.qml</file>
         <file>qml/widgets/LineEdit.qml</file>

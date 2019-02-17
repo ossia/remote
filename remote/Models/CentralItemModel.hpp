@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQuickItem>
 
+#include <Device/Address/AddressSettings.hpp>
 #include <Models/WidgetListModel.hpp>
 #include <RemoteContext.hpp>
 
@@ -26,7 +27,7 @@ public Q_SLOTS:
 
   void on_itemCreated(QString data, qreal x, qreal y);
   void on_addressCreated(QString data, qreal x, qreal y);
-  void loadItem(QString type, QString address, qreal x, qreal y);
+  void loadItem(QString type, Device::FullAddressSettings address, qreal x, qreal y);
 
   void addItem(GUIItem* item);
   void removeItem(GUIItem* item);
