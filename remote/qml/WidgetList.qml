@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 Item {
 
     id: widgList
-
+    property real spacing: 0;
     Component {
         id: itemFiller
         Item {
@@ -19,17 +19,14 @@ Item {
 
             height: theView.cellHeight
             width: theView.cellWidth
-            color: "grey"
-
-            border.color: "#302d2e"
-            border.width: 1
+            color: "transparent"
 
             Image {
                 id: img
-                width: theView.cellHeight - 6
-                height: theView.cellHeight - 6
-                x: 3
-                y: 3
+                width: theView.cellWidth - 2*spacing
+                height: theView.cellHeight - 2*spacing
+                x: spacing
+                y: spacing
             }
 
             MouseArea {
@@ -66,8 +63,6 @@ Item {
                 Rectangle {
                     color: "grey" //"#302d2e"
                     opacity: 0.9
-                    border.width: 1
-                    border.color: "#302d2e"
                     anchors.fill: parent
                 }
                 Text {
@@ -117,10 +112,7 @@ Item {
         id: theView
         model: factoriesModel
 
-        anchors.centerIn: parent
-        width: 180
-        height: 250
-
+        anchors.fill: parent
         highlightFollowsCurrentItem: true
         clip: true
         delegate: nameDelegate

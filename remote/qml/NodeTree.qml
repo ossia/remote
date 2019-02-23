@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.4
 
 Item {
     objectName: "NodeTree"
+
     TreeView {
         id: nodeView
         model: nodesModel
@@ -19,42 +20,41 @@ Item {
         TableViewColumn {
             title: "Address"
             role: "address"
-            width: 150
+            width: parent.width * 0.9
         }
+        backgroundVisible: false
 
-
-        headerDelegate: Rectangle{
-
-            color: "#bababa"
-            height: textItem.implicitHeight * 1.2
-            width: textItem.implicitWidth
-            // border.color: "#302d2e"
-            // border.width: 1
-            Text {
-                id: textItem
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: styleData.textAlignment
-                anchors.leftMargin: 12
-                text: styleData.value
-                elide: Text.ElideRight
-                color: "black"
-                font.bold: true
+        style: TreeViewStyle{
+            branchDelegate: Image{
+                source: styleData.isExpanded ?
+                            "qrc:///resources/branch_open.png"
+                          : "qrc:///resources/branch_closed.png"
+                fillMode: Image.PreserveAspectFit
             }
-            Rectangle {
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 1
-                anchors.topMargin: 1
-                width: 1
-                color: "#302d2e"
+            headerDelegate: Rectangle{
+
+                color: "#777777"// "#302d2e"// "#bababa"
+               // border.color: "#dcdcdc"
+               // border.width: 1
+
+                height: textItem.implicitHeight //* 1.2
+                width: textItem.implicitWidth
+
+                Text {
+                    id: textItem
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+
+                    color: "#302d2e"// "black"
+                    font.bold: true
+                    font.capitalization: Font.AllUppercase
+                }
             }
         }
-
-
-
-
         itemDelegate: Item {
             id: treeDelegate
             height:70
@@ -97,9 +97,9 @@ Item {
         rowDelegate: Rectangle {
             color: styleData.selected
                    ? "#aaa"
-                   : (styleData.alternate
+                   : "#302d2e"/*(styleData.alternate
                       ? "grey"
-                      : "#5e5a5c")
+                      : "#5e5a5c")*/
 
             height: 20
         }

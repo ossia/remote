@@ -15,17 +15,22 @@ MainPageForm {
         anchors.fill: parent
 
         ColumnLayout{
+            id: columnLayout
+
+            property real colWidth: 240;
+            Layout.preferredWidth: colWidth;
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 
             WidgetList {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 186; implicitHeight: 250}
+                implicitHeight: 250
+                width: columnLayout.colWidth
+            }
 
             NodeTree {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 200;
-                implicitHeight: lay.height
-                implicitWidth: 200
-                width: 200
+                implicitHeight: 200
+                width: columnLayout.colWidth
             }
 
         }

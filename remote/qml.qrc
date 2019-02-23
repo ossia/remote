@@ -48,5 +48,7 @@
         <file>resources/hslider.png</file>
         <file>resources/textedit.png</file>
         <file>resources/label.png</file>
+        <file>resources/branch_open.png</file>
+        <file>resources/branch_closed.png</file>
     </qresource>
 </RCC>
