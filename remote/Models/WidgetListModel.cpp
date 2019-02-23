@@ -78,12 +78,14 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl("qrc:///resources/pad16.png"),
       factory<XYPad>(),
       engine};
+
   componentList["Joystick"] = new RemoteUI::WidgetListData {
       "Joystick", "Joystick", "",
       QUrl("qrc:///qml/widgets/Joystick.qml"),
       QUrl("qrc:///resources/joystick16.png"),
       factory<Joystick>(),
       engine};
+
   componentList["Container"] = new RemoteUI::WidgetListData {
       "Container", "Container", "",
       QUrl("qrc:///qml/widgets/Container.qml"),
@@ -119,6 +121,7 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
       QUrl("qrc:///resources/multislider16.png"),
       factory<MultiSlider>(),
       engine};
+
   componentList["Graph"] = new RemoteUI::WidgetListData {
       "Graph", "Graph", "",
       QUrl("qrc:///qml/widgets/Graph.qml"),
