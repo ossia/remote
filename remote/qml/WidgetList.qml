@@ -1,5 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.5
 
 Item {
 
@@ -23,12 +24,13 @@ Item {
 
             Image {
                 id: img
-                width: sourceSize.width//theView.cellWidth - 2*spacing
-                height: sourceSize.height//theView.cellHeight - 2*spacing
-                sourceSize: Qt.size(24,24)
+                width: 40
+                height: 40
+
                 x: spacing
                 y: spacing
                 anchors.centerIn: parent
+                fillMode: Image.PreserveAspectFit
             }
 
             MouseArea {
@@ -38,56 +40,18 @@ Item {
                 drag.target: draggable
 
                 hoverEnabled: true
-                onEntered: if (image.toString() !== "")
-                               displayName()
-                onExited: if (image.toString() !== "")
-                              hideName()
-            }
-            function displayName() {
-                label.opacity = 1.
-                nameObj.text = name
-            }
-            function hideName() {
-                label.opacity = 0.
-                nameObj.text = ""
-            }
-            Item {
-                id: label
 
-                z: 10
-                anchors.fill: parent
-                Behavior on opacity {
-                    NumberAnimation {
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-
-                Rectangle {
-                    color: "grey" //"#302d2e"
-                    opacity: 0.9
-                    anchors.fill: parent
-                }
-                Text {
-                    id: nameObj
-
-                    text: ""
-                    anchors.centerIn: parent
-
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    verticalAlignment: Text.AlignBottom
-                    wrapMode: Text.WordWrap
-                    font.bold: true
-                    color: "#161516"
+                ToolTip
+                {
+                   visible: mouseArea.containsMouse
+                   text: name
+                   delay: 700
                 }
             }
 
             Component.onCompleted: {
                 if (image.toString() !== "") {
                     img.source = image
-                    hideName()
-                } else {
-                    displayName()
                 }
 
                 itemFiller.createObject(delegateLayout, { })

@@ -62,26 +62,28 @@
         <file>resources/textEdit-icon@2x.png</file>
         <file>resources/toggleSwitch-icon.png</file>
         <file>resources/toggleSwitch-icon@2x.png</file>
-        <file>resources/angleSlider-icon16.png</file>
-        <file>resources/container-icon16.png</file>
-        <file>resources/donutSlider-icon16.png</file>
-        <file>resources/graph-icon16.png</file>
-        <file>resources/hslider-icon16.png</file>
-        <file>resources/hsvSlider-icon16.png</file>
-        <file>resources/joystick-icon16.png</file>
-        <file>resources/keyboard-icon16.png</file>
-        <file>resources/label-icon16.png</file>
-        <file>resources/leds-icon16.png</file>
-        <file>resources/matrix-icon16.png</file>
-        <file>resources/multislider-icon16.png</file>
-        <file>resources/pad-icon16.png</file>
-        <file>resources/rgbSlider-icon16.png</file>
-        <file>resources/scope-icon16.png</file>
-        <file>resources/switch-icon16.png</file>
-        <file>resources/textEdit-icon16.png</file>
-        <file>resources/toggleSwitch-icon16.png</file>
         <file>resources/vslider-icon.png</file>
         <file>resources/vslider-icon@2x.png</file>
-        <file>resources/vslider-icon16.png</file>
+        <file>resources/angleSlider-icon24.png</file>
+        <file>resources/container-icon24.png</file>
+        <file>resources/donutSlider-icon24.png</file>
+        <file>resources/graph-icon24.png</file>
+        <file>resources/hsvSlider-icon24.png</file>
+        <file>resources/joystick-icon24.png</file>
+        <file>resources/keyboard-icon24.png</file>
+        <file>resources/label-icon24.png</file>
+        <file>resources/leds-icon24.png</file>
+        <file>resources/matrix-icon24.png</file>
+        <file>resources/multislider-icon24.png</file>
+        <file>resources/pad-icon24.png</file>
+        <file>resources/rgbSlider-icon24.png</file>
+        <file>resources/scope-icon24.png</file>
+        <file>resources/switch-icon24.png</file>
+        <file>resources/textEdit-icon24.png</file>
+        <file>resources/toggleSwitch-icon24.png</file>
+        <file>resources/vslider-icon24.png</file>
+        <file>qml/widgets/Scope.qml</file>
+        <file>qml/widgets/Keyboard.qml</file>
+        <file>qml/widgets/DonutSlider.qml</file>
     </qresource>
 </RCC>

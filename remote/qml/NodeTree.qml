@@ -20,7 +20,6 @@ Item {
         TableViewColumn {
             title: "Address"
             role: "address"
-            width: parent.width * 0.9
         }
         backgroundVisible: false
 
@@ -33,11 +32,9 @@ Item {
             }
             headerDelegate: Rectangle{
 
-                color: "#777777"// "#302d2e"// "#bababa"
-               // border.color: "#dcdcdc"
-               // border.width: 1
+                color: "#777777"
 
-                height: textItem.implicitHeight //* 1.2
+                height: textItem.implicitHeight
                 width: textItem.implicitWidth
 
                 Text {
@@ -49,14 +46,16 @@ Item {
                     text: styleData.value
                     elide: Text.ElideRight
 
-                    color: "#302d2e"// "black"
+                    color: "#302d2e"
                     font.bold: true
                     font.capitalization: Font.AllUppercase
                 }
             }
         }
+
         itemDelegate: Item {
             id: treeDelegate
+
             height:70
 
             MouseArea {
@@ -71,7 +70,7 @@ Item {
             Text {
                 id: text
                 anchors.verticalCenter: parent.verticalCenter
-                color: styleData.selected ? "#eee" : "#d2d2d2"//"#000"
+                color: styleData.selected ? "#eee" : "#d2d2d2"
                 elide: styleData.elideMode
                 text: styleData.value
                 font.pointSize: 10
@@ -97,9 +96,7 @@ Item {
         rowDelegate: Rectangle {
             color: styleData.selected
                    ? "#aaa"
-                   : "#302d2e"/*(styleData.alternate
-                      ? "grey"
-                      : "#5e5a5c")*/
+                   : "#302d2e"
 
             height: 20
         }
