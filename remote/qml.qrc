@@ -85,5 +85,6 @@
         <file>qml/widgets/Scope.qml</file>
         <file>qml/widgets/Keyboard.qml</file>
         <file>qml/widgets/DonutSlider.qml</file>
+        <file>resources/hslider-icon24.png</file>
     </qresource>
 </RCC>
