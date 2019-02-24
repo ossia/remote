@@ -23,10 +23,12 @@ Item {
 
             Image {
                 id: img
-                width: theView.cellWidth - 2*spacing
-                height: theView.cellHeight - 2*spacing
+                width: sourceSize.width//theView.cellWidth - 2*spacing
+                height: sourceSize.height//theView.cellHeight - 2*spacing
+                sourceSize: Qt.size(24,24)
                 x: spacing
                 y: spacing
+                anchors.centerIn: parent
             }
 
             MouseArea {
