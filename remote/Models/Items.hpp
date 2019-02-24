@@ -401,4 +401,49 @@ private:
   }
 };
 
+
+class Scope
+        : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+    void setAddressImpl(const Device::FullAddressSettings& addr) override{}
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
+
+class DonutSlider
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override{}
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
+
+class Keyboard
+    : public GUIItem
+{
+  Q_OBJECT
+public:
+  using GUIItem::GUIItem;
+
+private:
+  void setAddressImpl(const Device::FullAddressSettings& addr) override{}
+  void setValue(const State::Message& m) override
+  {
+  }
+};
+
 }

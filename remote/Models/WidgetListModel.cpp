@@ -20,74 +20,74 @@ auto factory()
 WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
 {
   componentList["HSlider"] = new RemoteUI::WidgetListData {
-      "HSlider", "Horizontal Slider", "hslider-icon16.png",
+      "HSlider", "Horizontal Slider", "hslider-icon24.png",
       QUrl("qrc:///qml/widgets/HSlider.qml"),
       QUrl("qrc:///resources/hslider-icon.png"),
       factory<Slider>(),
       engine};
 
   componentList["VSlider"] = new RemoteUI::WidgetListData {
-      "VSlider", "Vertical Slider", "vslider-icon16.png",
+      "VSlider", "Vertical Slider", "vslider-icon24.png",
       QUrl("qrc:///qml/widgets/VSlider.qml"),
       QUrl("qrc:///resources/vslider-icon.png"),
       factory<Slider>(),
       engine};
 
   componentList["Switch"] = new RemoteUI::WidgetListData {
-      "Switch", "CheckBox", "switch-icon16.png",
+      "Switch", "CheckBox", "toggleSwitch-icon24.png",
       QUrl("qrc:///qml/widgets/Switch.qml"),
       QUrl("qrc:///resources/toggleSwitch-icon.png"),
       factory<CheckBox>(),
       engine};
 
   componentList["LineEdit"] = new RemoteUI::WidgetListData {
-      "LineEdit", "LineEdit", "textEdit-icon16.png",
+      "LineEdit", "LineEdit", "textEdit-icon24.png",
       QUrl("qrc:///qml/widgets/LineEdit.qml"),
       QUrl("qrc:///resources/textEdit-icon.png"),
       factory<LineEdit>(),
       engine};
 
   componentList["Label"] = new RemoteUI::WidgetListData {
-      "Label", "Label", "label-icon16.png",
+      "Label", "Label", "label-icon24.png",
       QUrl("qrc:///qml/widgets/Label.qml"),
       QUrl("qrc:///resources/label-icon.png"),
       factory<Label>(),
       engine};
 
   componentList["Button"] = new RemoteUI::WidgetListData {
-      "Button", "Button", "switch-icon16.png",
+      "Button", "Button", "switch-icon24.png",
       QUrl("qrc:///qml/widgets/Button.qml"),
       QUrl("qrc:///resources/switch-icon.png"),
       factory<PushButton>(),
       engine};
   componentList["RGBSlider"] = new RemoteUI::WidgetListData {
-      "RGBSlider", "RGB", "rgbSlider-icon16.png",
+      "RGBSlider", "RGB", "rgbSlider-icon24.png",
       QUrl("qrc:///qml/widgets/RGBSlider.qml"),
       QUrl("qrc:///resources/rgbSlider-icon.png"),
       factory<RGBSlider>(),
       engine};
   componentList["HSVSlider"] = new RemoteUI::WidgetListData {
-      "HSVSlider", "HSV", "hsvSlider-icon16.png",
+      "HSVSlider", "HSV", "hsvSlider-icon24.png",
       QUrl("qrc:///qml/widgets/HSVSlider.qml"),
       QUrl("qrc:///resources/hsvSlider-icon.png"),
       factory<HSVSlider>(),
       engine};
   componentList["XYPad"] = new RemoteUI::WidgetListData {
-      "XYPad", "X-Y", "pad-icon16.png",
+      "XYPad", "X-Y", "pad-icon24.png",
       QUrl("qrc:///qml/widgets/XYPad.qml"),
       QUrl("qrc:///resources/pad-icon.png"),
       factory<XYPad>(),
       engine};
 
   componentList["Joystick"] = new RemoteUI::WidgetListData {
-      "Joystick", "Joystick", "joystick-icon16.png",
+      "Joystick", "Joystick", "joystick-icon24.png",
       QUrl("qrc:///qml/widgets/Joystick.qml"),
       QUrl("qrc:///resources/joystick-icon.png"),
       factory<Joystick>(),
       engine};
 
   componentList["Container"] = new RemoteUI::WidgetListData {
-      "Container", "Container", "container-icon16.png",
+      "Container", "Container", "container-icon24.png",
       QUrl("qrc:///qml/widgets/Container.qml"),
       QUrl("qrc:///resources/container-icon.png"),
       factory<Container>(),
@@ -95,38 +95,59 @@ WidgetListModel::WidgetListModel(QQmlApplicationEngine& engine)
 
 
   componentList["Graph"] = new RemoteUI::WidgetListData {
-      "Graph", "Graph", "graph-icon16.png",
+      "Graph", "Graph", "graph-icon24.png",
       QUrl("qrc:///qml/widgets/Graph.qml"),
       QUrl("qrc:///resources/graph-icon.png"),
       factory<Joystick>(),
       engine};
 
   componentList["Leds"] = new RemoteUI::WidgetListData {
-      "Leds", "Leds", "leds-icon16.png",
+      "Leds", "Leds", "leds-icon24.png",
       QUrl("qrc:///qml/widgets/Leds.qml"),
       QUrl("qrc:///resources/leds-icon.png"),
       factory<Leds>(),
       engine};
 
   componentList["Matrix"] = new RemoteUI::WidgetListData {
-      "Matrix", "Matrix", "matrix-icon16.png",
+      "Matrix", "Matrix", "matrix-icon24.png",
       QUrl("qrc:///qml/widgets/Matrix.qml"),
       QUrl("qrc:///resources/matrix-icon.png"),
       factory<Matrix>(),
       engine};
 
   componentList["Multislider"] = new RemoteUI::WidgetListData {
-      "Multislider", "Multislider", "multiSlider-icon16.png",
+      "Multislider", "Multislider", "multiSlider-icon24.png",
       QUrl("qrc:///qml/widgets/MultiSlider.qml"),
       QUrl("qrc:///resources/multislider-icon.png"),
       factory<MultiSlider>(),
       engine};
 
   componentList["Graph"] = new RemoteUI::WidgetListData {
-      "Graph", "Graph", "graph-icon16.png",
+      "Graph", "Graph", "graph-icon24.png",
       QUrl("qrc:///qml/widgets/Graph.qml"),
       QUrl("qrc:///resources/graph-icon.png"),
       factory<Graph>(),
+      engine};
+
+  componentList["Scope"] = new RemoteUI::WidgetListData {
+      "Scope", "Scope", "scope-icon24.png",
+      QUrl("qrc:///qml/widgets/Scope.qml"),
+      QUrl("qrc:///resources/scope-icon.png"),
+      factory<Scope>(),
+      engine};
+
+  componentList["DonutSlider"] = new RemoteUI::WidgetListData {
+      "DonutSlider", "DonutSlider", "donutSlider-icon24.png",
+      QUrl("qrc:///qml/widgets/DonutSlider.qml"),
+      QUrl("qrc:///resources/donutSlider-icon.png"),
+      factory<Scope>(),
+      engine};
+
+  componentList["Keyboard"] = new RemoteUI::WidgetListData {
+      "Keyboard", "Keyboard", "keyboard-icon24.png",
+      QUrl("qrc:///qml/widgets/Keyboard.qml"),
+      QUrl("qrc:///resources/keyboard-icon.png"),
+      factory<Scope>(),
       engine};
 
   // QML absolutely wants a QList<QObject*>
